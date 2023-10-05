@@ -1,31 +1,49 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import Cookies from "js-cookie";
 import Input from "../components/Input";
 import Button from "../components/Button";
 import ENDPOINTS from "../utils/endpoints";
 import { postApiCall } from "../utils/apiCalls";
 import Toast from "../utils/toastMessage";
+import {
+  signInStart,
+  signInSuccess,
+  signInFailure,
+} from "../redux/slice/userSlice";
+import { RootState } from "../redux/reducers";
 
 function SignIn() {
+  const dispatch = useDispatch();
+  const { loading } = useSelector((state: RootState) => state.user);
   const [user, setUser] = useState({});
-  const [loading, setLoading] = useState(false);
+  // const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setUser({ ...user, [e.target.id]: e.target.value });
   };
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setLoading(true);
-    const res = await postApiCall("/api/auth/signin", user);
-    if (res.success) {
-      Cookies.set("access-token", res.data.token, { expires: 7 });
-      Toast("Sign-in successful", "success");
-      navigate(ENDPOINTS.HOME);
-    } else {
-      Toast(res.message, "error");
+    try {
+      dispatch(signInStart());
+      // setLoading(true);
+      const res = await postApiCall("/api/auth/signin", user);
+      if (res.success) {
+        dispatch(signInSuccess(res));
+        Cookies.set("access-token", res.data.token, { expires: 7 });
+        Toast("Sign-in successful", "success");
+        navigate(ENDPOINTS.HOME);
+      } else {
+        dispatch(signInFailure(res.message));
+        Toast(res.message, "error");
+      }
+      // setLoading(false);
+    } catch (e: any) {
+      dispatch(signInFailure(e.message));
+      // setLoading(false);
+      Toast(e.message, "error");
     }
-    setLoading(false);
   };
   return (
     <div className="p-3 max-w-lg mx-auto">
