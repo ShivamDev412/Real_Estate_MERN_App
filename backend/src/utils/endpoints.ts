@@ -1,5 +1,5 @@
 const ENDPOINTS = {
-  LOGIN: "/login",
+  LOGIN: "/signin",
   LOGOUT: "/logout",
   SIGNUP: "/signup",
 };

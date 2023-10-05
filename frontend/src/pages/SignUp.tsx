@@ -1,23 +1,18 @@
 import { ChangeEvent, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+
 import Input from "../components/Input"; // Updated component filename
 import Button from "../components/Button";
 import ENDPOINTS from "../utils/endpoints";
 import Toast from "../utils/toastMessage";
-import { Link } from "react-router-dom";
+import { signUpInitialState } from "../utils/constant";
+import { postApiCall } from "../utils/apiCalls";
 
 function SignUp() {
-  const [newUser, setNewUser] = useState({
-    username: "",
-    email: "",
-    password: "",
-  });
-  const [formError, setFormError] = useState({
-    username: "",
-    email: "",
-    password: "",
-  });
+  const [newUser, setNewUser] = useState(signUpInitialState);
+  const [formError, setFormError] = useState(signUpInitialState);
   const [loading, setLoading] = useState(false);
-
+  const navigate = useNavigate();
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     setNewUser({ ...newUser, [e.target.id]: e.target.value });
   };
@@ -55,7 +50,6 @@ function SignUp() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    // Validate the form
     const validationErrors = validateForm(
       newUser.username,
       newUser.email,
@@ -63,24 +57,16 @@ function SignUp() {
     );
     setFormError(validationErrors);
 
-    // Check if there are validation errors
     if (Object.keys(validationErrors).length === 0) {
       try {
         setLoading(true);
-        const res = await fetch("/api/auth/signup", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(newUser),
-        });
-
-        const data = await res.json();
-        if (!data.success) {
-          Toast(data.message, "error"); // Use the Toast component to display errors
+        const data = await postApiCall("/api/auth/signup", newUser);
+        if (data.success) {
+          Toast("Sign-up successful", "success");
+          navigate(ENDPOINTS.SIGNIN);
+          setNewUser(signUpInitialState);
         } else {
-          // Handle successful sign-up
-          Toast("Sign-up successful", "success"); // Example success message
+          Toast(data.message, "error");
         }
         setLoading(false);
       } catch (err: any) {
