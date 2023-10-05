@@ -1,5 +1,5 @@
 import { ChangeEvent, useState } from "react";
-import Input from "../components/input"; // Updated component filename
+import Input from "../components/Input"; // Updated component filename
 import Button from "../components/Button";
 import ENDPOINTS from "../utils/endpoints";
 import Toast from "../utils/toastMessage";
