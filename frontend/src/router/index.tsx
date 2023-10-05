@@ -13,23 +13,23 @@ function Router() {
   const { HOME, PROFILE, SIGNUP, SIGNIN, ABOUT } = ENDPOINTS;
   return (
     <BrowserRouter>
-      <Routes>
-        <Route path={SIGNIN} element={<PublicRoute />}>
-          <Route element={<SignInPage />} />
-        </Route>
-        <Route path={SIGNUP} element={<PublicRoute />}>
-          <Route element={<SignUpPage />} />
-        </Route>
-        <Route path={PROFILE} element={<PrivateRoute />}>
-          <Route element={<ProfilePage />} />
-        </Route>
-        <Route path={ABOUT} element={<PrivateRoute />}>
-          <Route element={<AboutPage />} />
-        </Route>
-        <Route path={HOME} element={<PrivateRoute />}>
-          <Route element={<HomePage />} />
-        </Route>
-      </Routes>
+        <Routes>
+          <Route element={<PublicRoute />}>
+            <Route path={SIGNIN} element={<SignInPage />} />
+          </Route>
+          <Route element={<PublicRoute />}>
+            <Route path={SIGNUP} element={<SignUpPage />} />
+          </Route>
+          <Route element={<PrivateRoute />}>
+            <Route path={PROFILE} element={<ProfilePage />} />
+          </Route>
+          <Route element={<PrivateRoute />}>
+            <Route  path={ABOUT} element={<AboutPage />} />
+          </Route>
+          <Route element={<PrivateRoute />}>
+            <Route path={HOME} element={<HomePage />} />
+          </Route>
+        </Routes>
     </BrowserRouter>
   );
 }
