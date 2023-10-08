@@ -16,7 +16,7 @@ const store = configureStore({
     getDefaultMiddleware({
       serializableCheck: false,
     }).concat(logger),
-  devTools: process.env.NODE_ENV !== "production",
+  devTools: import.meta.env.VITE_NODE_ENV !== "production",
 });
 export type RootState = ReturnType<typeof store.getState>;
 export const persistor = persistStore(store);

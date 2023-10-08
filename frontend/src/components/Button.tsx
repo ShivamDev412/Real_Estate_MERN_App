@@ -8,6 +8,7 @@ interface Props {
   type?: ButtonType;
   className?: string;
   disabled: boolean;
+  onClick?: () => void;
 }
 
 const Button: React.FC<Props> = ({
@@ -15,6 +16,7 @@ const Button: React.FC<Props> = ({
   type = "button",
   className = "",
   disabled,
+  onClick,
 }) => {
   const buttonClasses = twMerge(
     "text-white p-3 rounded-lg uppercase hover:opacity-95 disabled:opacity-80 w-full",
@@ -22,7 +24,12 @@ const Button: React.FC<Props> = ({
   );
 
   return (
-    <button type={type} className={buttonClasses} disabled={disabled}>
+    <button
+      type={type}
+      className={buttonClasses}
+      disabled={disabled}
+      onClick={onClick}
+    >
       {value}
     </button>
   );

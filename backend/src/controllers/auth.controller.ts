@@ -31,7 +31,14 @@ export const signup = async (
     response.status(201).json({
       success: true,
       message: "User created successfully",
-      data: newUser,
+      data: {
+        user: {
+          email: newUser.email,
+          username: newUser.username,
+          avatar: newUser.avatar,
+          id: newUser._id,
+        },
+      },
     });
   } catch (error: any) {
     next(error);
@@ -71,6 +78,8 @@ export const signIn = async (
               user: {
                 email: existingUser.email,
                 username: existingUser.username,
+                avatar: existingUser.avatar,
+                id: existingUser._id,
               },
               token: token,
             },
@@ -78,6 +87,71 @@ export const signIn = async (
       }
     }
   } catch (error: any) {
+    next(error);
+  }
+};
+export const googleSignIn = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const { email, name, image } = req.body;
+  try {
+    const user = await User.findOne({ email });
+    if (user) {
+      const token = jwt.sign(
+        { id: user._id },
+        process.env.JWT_SECRET as string
+      );
+      const { password, ...rest } = user._doc;
+      res.status(200).json({
+        success: true,
+        message: "User logged in successfully",
+        data: {
+          user: {
+            avatar: rest.avatar,
+            email: rest.email,
+            username: rest.username,
+            id: rest._id,
+          },
+          token: token,
+        },
+      });
+    } else {
+      const newPassword =
+        Math.random().toString(36).slice(-8) +
+        Math.random().toString(36).slice(-8);
+      const salt = await bcrypt.genSalt(10);
+      const hashedPassword = bcrypt.hashSync(newPassword, salt);
+      const newUser = new User({
+        email,
+        username:
+          name.split(" ").join("").toLowerCase() +
+          Math.random().toString(36).slice(-4),
+        password: hashedPassword,
+        avatar: image,
+      });
+      await newUser.save();
+      const token = jwt.sign(
+        { id: newUser._id },
+        process.env.JWT_SECRET as string
+      );
+      const { password: pass, ...rest } = newUser._doc;
+      res.status(200).json({
+        success: true,
+        message: "User logged in successfully",
+        data: {
+          user: {
+            avatar: rest.avatar,
+            email: rest.email,
+            username: rest.username,
+            id: rest._id,
+          },
+          token: token,
+        },
+      });
+    }
+  } catch (error) {
     next(error);
   }
 };

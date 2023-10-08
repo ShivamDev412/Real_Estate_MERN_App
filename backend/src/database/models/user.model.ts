@@ -4,6 +4,10 @@ interface User extends Document {
   username: string;
   email: string;
   password: string;
+  avatar: string;
+}
+interface UserDocument extends User {
+  _doc: any;
 }
 const UserSchema = new mongoose.Schema(
   {
@@ -21,10 +25,14 @@ const UserSchema = new mongoose.Schema(
       type: String,
       required: [true, "Password is required"],
       minlength: [8, "Password should be at least 8 characters long"],
-      // maxlength: [20, "Password should be at most 20 characters long"],
+    },
+    avatar: {
+      type: String,
+      default:
+        "https://t4.ftcdn.net/jpg/05/42/36/11/360_F_542361185_VFRJWpR2FH5OiAEVveWO7oZnfSccZfD3.jpg",
     },
   },
   { timestamps: true }
 );
-const User = mongoose.model<User>("User", UserSchema);
+const User = mongoose.model<UserDocument>("User", UserSchema);
 export default User;

@@ -1,6 +1,31 @@
 import { createSlice } from "@reduxjs/toolkit";
-const initialState = {
-  currentUser: null,
+type CurrentUserType = {
+  data: {
+    token?: string;
+    user: {
+      avatar: string;
+      email: string;
+      id: string;
+      username: string;
+    };
+  };
+};
+interface InitialStateProps {
+  currentUser: CurrentUserType;
+  loading: boolean;
+}
+const initialState: InitialStateProps = {
+  currentUser: {
+    data: {
+      token: "",
+      user: {
+        avatar: "",
+        email: "",
+        id: "",
+        username: "",
+      },
+    },
+  },
   loading: false,
 };
 
@@ -17,7 +42,7 @@ const userSlice = createSlice({
     },
     signInFailure: (state) => {
       state.loading = false;
-      state.currentUser = null;
+      state.currentUser = initialState.currentUser;
     },
   },
 });

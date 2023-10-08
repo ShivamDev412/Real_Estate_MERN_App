@@ -4,8 +4,8 @@ import ENDPOINTS from "../utils/endpoints";
 import PrivateRoute from "./privateRoute";
 import PublicRoute from "./publicRoute";
 const HomePage = React.lazy(() => import("../pages/Home"));
-const SignUpPage = React.lazy(() => import("../pages/SignUp"));
-const SignInPage = React.lazy(() => import("../pages/SignIn"));
+const SignUpPage = React.lazy(() => import("../pages/signUp"));
+const SignInPage = React.lazy(() => import("../pages/signIn"));
 const ProfilePage = React.lazy(() => import("../pages/Profile"));
 const AboutPage = React.lazy(() => import("../pages/About"));
 
