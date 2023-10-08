@@ -61,10 +61,13 @@ function Header() {
             className={"hidden sm:inline"}
           />
           {auth ? (
-            <img className="w-10 h-10 rounded-full" 
-              src={currentUser?.data?.user?.avatar}
-              alt={currentUser?.data?.user?.username}
-            />
+            <Link to={ENDPOINTS.PROFILE}>
+              <img
+                className="w-10 h-10 rounded-full"
+                src={currentUser?.data?.user?.avatar}
+                alt={currentUser?.data?.user?.username}
+              />
+            </Link>
           ) : (
             <NavLinks
               linkName="Sign In"
