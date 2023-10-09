@@ -2,17 +2,49 @@ import Button from "../../components/Button";
 import Input from "../../components/Input";
 import { useProfileController } from "./controller";
 function Profile() {
-  const { handleInputChange, currentUser, profile, formError, updateProfile } =
-    useProfileController();
+  const {
+    handleInputChange,
+    currentUser,
+    profile,
+    formError,
+    updateProfile,
+    fileRef,
+    setFile,
+    fileUploadStatus,
+  } = useProfileController();
   return (
     <div className="w-[90%] sm:w-[60%] md:w-[50%] mx-auto">
       <h1 className="text-3xl font-semibold text-center my-7">My Profile</h1>
-      <form className="flex flex-col w-full gap-4 my-4" onSubmit={updateProfile}>
+      <form
+        className="flex flex-col w-full gap-4 my-4"
+        onSubmit={updateProfile}
+      >
+        <input
+          type="file"
+          accept="image/*"
+          ref={fileRef}
+          multiple={false}
+          hidden={true}
+          onChange={(e) => setFile(e.target.files && e.target.files[0])}
+        />
         <img
-          src={currentUser.data.user.avatar}
+          src={
+            profile.avatar !== ""
+              ? profile.avatar
+              : currentUser.data.user.avatar
+          }
           alt={currentUser.data.user.username}
+          onClick={() => fileRef.current?.click()}
           className="w-32 h-32 mx-auto rounded-[50%] hover:cursor-pointer self-center"
         />
+        {fileUploadStatus !== 0 && fileUploadStatus < 100 && (
+          <p className="text-center">Uploading... {fileUploadStatus}%</p>
+        )}
+        {fileUploadStatus === 100 && (
+          <p className="text-center text-green-700">
+            File uploaded successfully
+          </p>
+        )}
         <Input
           id="username"
           onChange={handleInputChange}
@@ -36,7 +68,7 @@ function Profile() {
           onChange={handleInputChange}
           value={profile.password}
         />
-         {formError.password && (
+        {formError.password && (
           <div className="text-red-500">{formError.password}</div>
         )}
         <Button
