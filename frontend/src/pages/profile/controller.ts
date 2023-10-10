@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import Cookies from "js-cookie";
 import { RootState } from "../../redux/reducers";
 import {
   getDownloadURL,
@@ -13,10 +15,15 @@ import {
   updateUserStart,
   updateUserSuccess,
   updateUserFailure,
+  deleteUserStart,
+  deleteUserSuccess,
+  deleteUserFailure,
 } from "../../redux/slice/user/userSlice";
-import { postApiCall } from "../../utils/apiCalls";
+import { postApiCall, deleteApiCall } from "../../utils/apiCalls";
+import ENDPOINTS from "../../utils/endpoints";
 
 export const useProfileController = () => {
+  const navigate = useNavigate();
   const { currentUser, loading } = useSelector(
     (state: RootState) => state.user
   );
@@ -93,7 +100,29 @@ export const useProfileController = () => {
       dispatch(updateUserFailure());
     }
   };
+  const deleteAccount = async () => {
+    try {
+      dispatch(deleteUserStart());
+      const res = await deleteApiCall(
+        `/api/user/delete-user/${currentUser.data.user.id}`
+      );
+      if (res.success) {
+        Toast("Account deleted successfully", "success");
+        Cookies.remove("access-token", { path: "/"});
+        navigate(ENDPOINTS.SIGNIN);
+        dispatch(deleteUserSuccess());
+      } else {
+        Toast(res.message, "error");
+        dispatch(deleteUserFailure());
+      }
+    } catch (err: any) {
+      Toast(err.message, "error");
+      dispatch(deleteUserFailure());
+      return;
+    }
+  };
   return {
+    deleteAccount,
     loading,
     fileUploadStatus,
     setFile,

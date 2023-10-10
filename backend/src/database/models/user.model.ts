@@ -15,16 +15,7 @@ const UserSchema = new mongoose.Schema(
       type: String,
       required: [true, "Username is required"],
       unique: [true, "Username should be unique"],
-      validate: {
-        validator: async function (value: string) {
-          const usernameCount = await mongoose.models.UserSchema.countDocuments({
-            username: value,
-          });
-          return usernameCount === 0;
-        },
-        message: "Username already exists",
-      },
-    },
+   },
     email: {
       type: String,
       required: [true, "Email is required"],

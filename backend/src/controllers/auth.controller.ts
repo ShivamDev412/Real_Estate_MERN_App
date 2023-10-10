@@ -42,8 +42,6 @@ export const signup = async (
     });
   } catch (error: any) {
     next(error);
-    // response.status(500).json({ message: error.message });
-    // console.log(error);
   }
 };
 
@@ -99,6 +97,7 @@ export const googleSignIn = async (
   try {
     const user = await User.findOne({ email });
     if (user) {
+      console.log("if");
       const token = jwt.sign(
         { id: user._id },
         process.env.JWT_SECRET as string
@@ -132,24 +131,28 @@ export const googleSignIn = async (
         avatar: image,
       });
       await newUser.save();
-      const token = jwt.sign(
-        { id: newUser._id },
-        process.env.JWT_SECRET as string
-      );
-      const { password: pass, ...rest } = newUser._doc;
-      res.status(200).json({
-        success: true,
-        message: "User logged in successfully",
-        data: {
-          user: {
-            avatar: rest.avatar,
-            email: rest.email,
-            username: rest.username,
-            id: rest._id,
+      if (newUser) {
+        const token = jwt.sign(
+          { id: newUser._id },
+          process.env.JWT_SECRET as string
+        );
+        const { password: pass, ...rest } = newUser._doc;
+        res.status(200).json({
+          success: true,
+          message: "User logged in successfully",
+          data: {
+            user: {
+              avatar: rest.avatar,
+              email: rest.email,
+              username: rest.username,
+              id: rest._id,
+            },
+            token: token,
           },
-          token: token,
-        },
-      });
+        });
+      } else {
+        next(handleError(500, "Something went wrong"));
+      }
     }
   } catch (error) {
     next(error);

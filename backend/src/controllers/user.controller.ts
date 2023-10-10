@@ -58,3 +58,22 @@ export const updateUserProfile = async (
     }
   }
 };
+export const deleteUser = async (
+  request: Request,
+  response: Response,
+  next: NextFunction
+) => {
+  //@ts-ignore
+  if (request.user.id !== request.params.id)
+    return next(handleError(401, "You can only delete your own account!"));
+  try {
+    const deleteUser = await User.findByIdAndDelete(request.params.id);
+    if (!deleteUser) {
+      return next(handleError(404, "User not found"));
+    }
+    response.status(201).json({
+      success: true,
+      message: "User has been deleted",
+    });
+  } catch (error) {}
+};
