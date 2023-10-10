@@ -108,7 +108,7 @@ export const useProfileController = () => {
       );
       if (res.success) {
         Toast("Account deleted successfully", "success");
-        Cookies.remove("access-token", { path: "/"});
+        Cookies.remove("access-token", { path: "/" });
         navigate(ENDPOINTS.SIGNIN);
         dispatch(deleteUserSuccess());
       } else {
@@ -121,6 +121,11 @@ export const useProfileController = () => {
       return;
     }
   };
+  const signOut = () => {
+    Toast("Signed out successfully", "success");
+    Cookies.remove("access-token", { path: "/" });
+    navigate(ENDPOINTS.SIGNIN);
+  };
   return {
     deleteAccount,
     loading,
@@ -131,5 +136,6 @@ export const useProfileController = () => {
     currentUser,
     profile,
     updateProfile,
+    signOut,
   };
 };

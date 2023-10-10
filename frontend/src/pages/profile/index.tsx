@@ -11,7 +11,8 @@ function Profile() {
     fileRef,
     setFile,
     fileUploadStatus,
-    deleteAccount
+    deleteAccount,
+    signOut,
   } = useProfileController();
   return (
     <div className="w-[90%] sm:w-[60%] md:w-[50%] mx-auto">
@@ -80,8 +81,12 @@ function Profile() {
         disabled={false}
       />
       <div className="flex justify-between items-center my-3">
-        <button className="text-red-700" onClick={deleteAccount}>Delete Account</button>
-        <button className="text-red-700">Sign Out</button>
+        <button className="text-red-700" onClick={deleteAccount}>
+          Delete Account
+        </button>
+        <button className="text-red-700" onClick={signOut}>
+          Sign Out
+        </button>
       </div>
     </div>
   );
