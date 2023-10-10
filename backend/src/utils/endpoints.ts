@@ -3,6 +3,7 @@ const ENDPOINTS = {
   LOGOUT: "/logout",
   SIGNUP: "/signup",
   GOOGLE:"/google",
+  UPDATE_USER:"/update-user/:id",
 };
 const APITYPE = {
   USER: "/api/user",

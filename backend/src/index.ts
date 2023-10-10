@@ -1,4 +1,5 @@
 import express from "express";
+import cookieParser from "cookie-parser";
 import cors from "cors";
 require("dotenv").config();
 import connectDB from "./database";
@@ -13,6 +14,7 @@ connectDB();
 
 // Middlewares
 app.use(express.json());
+app.use(cookieParser());
 app.use(cors());
 app.use(express.urlencoded({ extended: true }));
 app.use(APITYPE.USER, userRoutes);

@@ -3,10 +3,10 @@ import Input from "../../components/Input";
 import { useProfileController } from "./controller";
 function Profile() {
   const {
+    loading,
     handleInputChange,
     currentUser,
     profile,
-    formError,
     updateProfile,
     fileRef,
     setFile,
@@ -50,32 +50,26 @@ function Profile() {
           onChange={handleInputChange}
           value={profile.username}
         />
-        {formError.username && (
-          <div className="text-red-500">{formError.username}</div>
-        )}
+
         <Input
           id="email"
           type="email"
           onChange={handleInputChange}
           value={profile.email}
         />
-        {formError.email && (
-          <div className="text-red-500">{formError.email}</div>
-        )}
+
         <Input
           id="password"
           type="password"
           onChange={handleInputChange}
           value={profile.password}
         />
-        {formError.password && (
-          <div className="text-red-500">{formError.password}</div>
-        )}
+
         <Button
           value="Update Profile"
           type="submit"
           className="bg-slate-700"
-          disabled={false}
+          disabled={loading}
         />
       </form>
       <Button

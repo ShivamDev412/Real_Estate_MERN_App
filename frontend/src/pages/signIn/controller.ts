@@ -10,7 +10,7 @@ import {
   signInStart,
   signInSuccess,
   signInFailure,
-} from "../../redux/slice/userSlice";
+} from "../../redux/slice/user/userSlice";
 import { RootState } from "../../redux/reducers";
 import { app } from "../../utils/firebaseAuth";
 import { loginInitialState } from "../../utils/constant";
@@ -49,9 +49,9 @@ export const useSignInController = () => {
         // setLoading(true);
         const res = await postApiCall("/api/auth/signin", user);
         if (res.success) {
+          Toast("Sign-in successful", "success");
           dispatch(signInSuccess(res));
           Cookies.set("access-token", res.data.token, { expires: 7 });
-          Toast("Sign-in successful", "success");
           navigate(ENDPOINTS.HOME);
         } else {
           dispatch(signInFailure(res.message));
