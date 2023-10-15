@@ -7,18 +7,36 @@ export const loginInitialState = {
   email: "",
   password: "",
 };
-export const listingInitialState = {
+type NumericOrString = number | string;
+
+export interface ListingType {
+  name: string;
+  description: string;
+  address: string;
+  regularPrice: NumericOrString;
+  discountPrice: NumericOrString;
+  bathroom: NumericOrString;
+  bedroom: NumericOrString;
+  imageUrl: string[];
+  offer: boolean;
+  sale: boolean;
+  rent: boolean;
+  furnished: boolean;
+  parking: boolean;
+}
+export const listingInitialState: ListingType = {
   name: "",
   description: "",
   address: "",
-  regularPrice: 0,
-  discountedPrice: 0,
-  bathroom: 0,
-  bedroom: 0,
+  regularPrice: 50,
+  discountPrice: 0,
+  bathroom: 1,
+  bedroom: 1,
   furnished: false,
   parking: false,
   rent: false,
   offer: false,
+  sale: false,
   imageUrl: [],
 };
 export const listingInitialStateError = {
@@ -26,12 +44,8 @@ export const listingInitialStateError = {
   description: "",
   address: "",
   regularPrice: "",
-  discountedPrice: "",
+  discountPrice: "",
   bathroom: "",
   bedroom: "",
-  furnished: "",
-  parking: "",
-  rent: "",
-  offer: "",
   imageUrl: "",
-}
+};

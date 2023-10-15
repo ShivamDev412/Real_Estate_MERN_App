@@ -5,6 +5,8 @@ import {
   ref,
   uploadBytesResumable,
 } from "firebase/storage";
+import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux/es/hooks/useSelector";
 import {
   listingInitialState,
   listingInitialStateError,
@@ -12,6 +14,8 @@ import {
 import { validateListing } from "../../utils/validations";
 import { app } from "../../utils/firebaseAuth";
 import Toast from "../../utils/toastMessage";
+import { postApiCall } from "../../utils/apiCalls";
+import { RootState } from "../../redux/reducers";
 
 export const createListingController = () => {
   const [listing, setListing] = useState(listingInitialState);
@@ -19,7 +23,8 @@ export const createListingController = () => {
   const [formError, setFormError] = useState(listingInitialStateError);
   const [disableUpload, setDisableUpload] = useState(true);
   const [loading, setLoading] = useState<boolean>(false);
-
+  const { currentUser } = useSelector((state: RootState) => state.user);
+  const navigate = useNavigate();
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
@@ -56,7 +61,27 @@ export const createListingController = () => {
     const validationErrors = validateListing(listing);
     setFormError(validationErrors);
     if (Object.keys(validationErrors).length === 0) {
-      // Add your logic to create a listing
+      try {
+        const listingToSend = {
+          ...listing,
+          discountPrice: !listing.offer ? undefined : listing.discountPrice,
+          userRef: currentUser.data.user.id,
+        };
+        const res = await postApiCall(
+          `/api/listing/create-listing`,
+          listingToSend
+        );
+        if (res.success) {
+          Toast(res.message, "success");
+          navigate(`/listing/${res.data._id}`);
+          setListing(listingInitialState);
+          setFormError(listingInitialStateError);
+        } else {
+          Toast(res.message, "error");
+        }
+      } catch (e: any) {
+        Toast(e.message, "error");
+      }
     }
   };
   const uploadFiles = () => {

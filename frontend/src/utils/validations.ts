@@ -1,17 +1,4 @@
-type NumericOrString = number | string;
-
-export interface ListingType {
-  name: string;
-  description: string;
-  address: string;
-  regularPrice: NumericOrString;
-  discountedPrice: NumericOrString;
-  bathroom: NumericOrString;
-  bedroom: NumericOrString;
-  rent: boolean;
-  offer: boolean;
-  imageUrl: string[];
-}
+import { ListingType } from "./constant";
 
 export const validateListing = (listing: ListingType) => {
   const errors: any = {};
@@ -35,14 +22,16 @@ export const validateListing = (listing: ListingType) => {
   if (isNaN(Number(listing.regularPrice)) || listing.regularPrice === "") {
     errors.regularPrice = "Regular Price is required";
   }
-
-  // Validate the 'discountedPrice' property
-  if (
-    isNaN(Number(listing.discountedPrice)) ||
-    listing.discountedPrice === ""
-  ) {
-    errors.discountedPrice = "Discounted Price is required";
-  }
+  if (listing.offer) {
+    // Validate the 'discountedPrice' property
+    if (isNaN(Number(listing.discountPrice)) || listing.discountPrice === "") {
+      errors.discountedPrice = "Discounted Price is required";
+    }
+    if (Number(listing.regularPrice) < Number(listing.discountPrice)) {
+      errors.discountPrice =
+        "Discount Price cannot be greater than Regular Price";
+    }
+  } 
 
   // Validate the 'bathroom' property
   if (isNaN(Number(listing.bathroom)) || listing.bathroom === "") {

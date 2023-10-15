@@ -4,6 +4,8 @@ interface Props {
   value: string | number;
   type?: string;
   label?: string;
+  min?: number;
+  max?: number;
   onChange: (event: ChangeEvent<HTMLInputElement>) => void;
 }
 interface TextAreaProps {
@@ -81,6 +83,8 @@ export const NumberInput: React.FC<Props> = ({
   onChange,
   value,
   label,
+  min,
+  max,
 }) => {
   return (
     <div className="flex items-center">
@@ -92,7 +96,8 @@ export const NumberInput: React.FC<Props> = ({
         id={id}
         name={id}
         value={value}
-        min={0}
+        min={min}
+        max={max}
         className="border p-3 rounded-lg placeholder:capitalize w-full"
         onChange={onChange}
       />

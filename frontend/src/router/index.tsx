@@ -9,9 +9,10 @@ const SignInPage = React.lazy(() => import("../pages/signIn"));
 const ProfilePage = React.lazy(() => import("../pages/profile"));
 const AboutPage = React.lazy(() => import("../pages/About"));
 const CreateListing = React.lazy(() => import("../pages/createListing"));
-
+const ListingPage = React.lazy(() => import("../pages/listing"));
 function Router() {
-  const { HOME, PROFILE, SIGNUP, SIGNIN, ABOUT, CREATE_LISTING } = ENDPOINTS;
+  const { HOME, PROFILE, SIGNUP, SIGNIN, ABOUT, CREATE_LISTING, LISTING } =
+    ENDPOINTS;
   return (
     <BrowserRouter>
       <Routes>
@@ -29,6 +30,9 @@ function Router() {
         </Route>
         <Route element={<PrivateRoute />}>
           <Route path={CREATE_LISTING} element={<CreateListing />} />
+        </Route>
+        <Route element={<PrivateRoute />}>
+          <Route path={LISTING} element={<ListingPage />} />
         </Route>
         <Route element={<PrivateRoute />}>
           <Route path={HOME} element={<HomePage />} />

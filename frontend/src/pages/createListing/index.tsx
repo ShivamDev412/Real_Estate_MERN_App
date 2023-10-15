@@ -1,3 +1,4 @@
+import React from "react";
 import { createListingController } from "./controller";
 import Input, {
   NumberInput,
@@ -56,7 +57,7 @@ function CreateListing() {
             <div className="flex gap-2 flex-wrap">
               <ToggleSwitch
                 id="sale"
-                checked={listing.furnished}
+                checked={listing.sale}
                 onChange={(e) => handleToggleInputChange(e)}
               />
               <ToggleSwitch
@@ -88,6 +89,8 @@ function CreateListing() {
                   label="Bathroom"
                   value={listing.bathroom}
                   type="number"
+                  min={1}
+                  max={10}
                   onChange={(e) => handleInputChange(e)}
                 />
                 {formError?.bathroom && (
@@ -101,6 +104,8 @@ function CreateListing() {
                   label="Bedroom"
                   value={listing.bedroom}
                   type="number"
+                  min={1}
+                  max={10}
                   onChange={(e) => handleInputChange(e)}
                 />
                 {formError?.bedroom && (
@@ -112,21 +117,29 @@ function CreateListing() {
               id="regularPrice"
               value={listing.regularPrice}
               type="number"
+              min={50}
+              max={1000000}
               label={"Regular Price ($ / month)"}
               onChange={(e) => handleInputChange(e)}
             />
             {formError?.regularPrice && (
               <div className="text-red-500">{formError?.regularPrice}</div>
             )}
-            <NumberInput
-              id="discountedPrice"
-              value={listing.discountedPrice}
-              type="number"
-              label={"Discounted Price ($ / month)"}
-              onChange={(e) => handleInputChange(e)}
-            />
-            {formError?.discountedPrice && (
-              <div className="text-red-500">{formError?.discountedPrice}</div>
+            {listing.offer && (
+              <React.Fragment>
+                <NumberInput
+                  id="discountPrice"
+                  value={listing.discountPrice}
+                  type="number"
+                  min={0}
+                  max={1000000}
+                  label={"Discounted Price ($ / month)"}
+                  onChange={(e) => handleInputChange(e)}
+                />
+                {formError?.discountPrice && (
+                  <div className="text-red-500">{formError?.discountPrice}</div>
+                )}
+              </React.Fragment>
             )}
           </div>
           <div className="flex flex-col gap-4 w-full md:w-[48%]">
@@ -146,7 +159,7 @@ function CreateListing() {
           <Button
             value={"Create Listing"}
             type="submit"
-            disabled={false}
+            disabled={loading}
             className="bg-slate-700"
           />
         </div>
