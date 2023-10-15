@@ -13,6 +13,7 @@ function Profile() {
     fileUploadStatus,
     deleteAccount,
     signOut,
+    goToCreateListing,
   } = useProfileController();
   return (
     <div className="w-[90%] sm:w-[60%] md:w-[50%] mx-auto">
@@ -79,6 +80,7 @@ function Profile() {
         type="button"
         className="bg-green-700"
         disabled={false}
+        onClick={goToCreateListing}
       />
       <div className="flex justify-between items-center my-3">
         <button className="text-red-700" onClick={deleteAccount}>

@@ -2,7 +2,8 @@ import { ChangeEvent, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import ENDPOINTS from "../../utils/endpoints";
 import Toast from "../../utils/toastMessage";
-import { signUpInitialState, validateForm } from "../../utils/constant";
+import { signUpInitialState } from "../../utils/constant";
+import { validateForm } from "../../utils/validations";
 import { postApiCall } from "../../utils/apiCalls";
 
 export const useSignupController = () => {

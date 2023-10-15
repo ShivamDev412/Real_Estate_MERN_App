@@ -75,5 +75,7 @@ export const deleteUser = async (
       success: true,
       message: "User has been deleted",
     });
-  } catch (error) {}
+  } catch (error) {
+    next(error);
+  }
 };

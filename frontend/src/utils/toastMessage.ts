@@ -10,6 +10,11 @@ const toastConfig: ToastOptions = {
   draggable: true,
   progress: undefined,
   theme: "light",
+  style: {
+    padding: "1rem",
+    borderRadius: "0.5rem",
+    boxShadow: "0 0 5px rgba(0, 0, 0, 0.2)",
+  },
 };
 
 const Toast = (
@@ -22,6 +27,9 @@ const Toast = (
       break;
     case "error":
       toast.error(message, toastConfig);
+      break;
+    case "info":
+      toast.info(message, toastConfig);
       break;
     default:
       toast.info(message, toastConfig);

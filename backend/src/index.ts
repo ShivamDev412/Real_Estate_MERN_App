@@ -5,6 +5,7 @@ require("dotenv").config();
 import connectDB from "./database";
 import userRoutes from "./routes/user.route";
 import authRoutes from "./routes/auth.route";
+import listingRoutes from "./routes/listing.route";
 import { APITYPE } from "./utils/endpoints";
 import { errorMiddleware } from "./middleware/errorMiddleware";
 
@@ -19,6 +20,7 @@ app.use(cors());
 app.use(express.urlencoded({ extended: true }));
 app.use(APITYPE.USER, userRoutes);
 app.use(APITYPE.AUTH, authRoutes);
+app.use(APITYPE.LISTING, listingRoutes);
 app.use(errorMiddleware);
 
 app.listen(PORT, () => {

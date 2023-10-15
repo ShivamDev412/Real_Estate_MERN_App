@@ -41,8 +41,8 @@ export const useProfileController = () => {
   const [file, setFile] = useState<any>(undefined);
   const [fileUploadStatus, setFileUploadStatus] = useState<number>(0);
   const handleFileUpload = () => {
-    if (file.size > 2000000) {
-      Toast("File size should be less than 2MB", "error");
+    if (file.size > 5000000) {
+      Toast("File size should be less than 5MB", "error");
       return;
     }
     const storage = getStorage(app);
@@ -126,6 +126,7 @@ export const useProfileController = () => {
     Cookies.remove("access-token", { path: "/" });
     navigate(ENDPOINTS.SIGNIN);
   };
+  const goToCreateListing = () => navigate(ENDPOINTS.CREATE_LISTING);
   return {
     deleteAccount,
     loading,
@@ -137,5 +138,6 @@ export const useProfileController = () => {
     profile,
     updateProfile,
     signOut,
+    goToCreateListing,
   };
 };
