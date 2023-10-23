@@ -6,6 +6,10 @@ const ENDPOINTS = {
   UPDATE_USER: "/update-user/:id",
   DELETE_USER: "/delete-user/:id",
   CREATE_LISTING: "/create-listing",
+  GET_USER_LISTING:"/listings/:userId",
+  GET_LISTING: "/:listingId",
+  DELETE_LISTING: "/delete/:listingId",
+  UPDATE_LISTING: "/update-listing/:listingId",
 };
 const APITYPE = {
   USER: "/api/user",

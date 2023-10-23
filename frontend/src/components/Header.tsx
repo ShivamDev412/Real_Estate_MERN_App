@@ -32,7 +32,7 @@ function Header() {
   const { currentUser } = useSelector((state: RootState) => state.user);
   return (
     <header className="bg-slate-200 shadow-md">
-      <div className="flex justify-between items-center max-w-6xl mx-auto p-3">
+      <div className="flex justify-between items-center max-w-[80%] mx-auto py-3">
         <h1 className="font-bold text-sm sm:text-xl flex flex-wrap">
           <Link to={ENDPOINTS.HOME}>
             <span className="text-slate-500">Paradise</span>Estate

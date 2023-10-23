@@ -126,6 +126,9 @@ export const useProfileController = () => {
     Cookies.remove("access-token", { path: "/" });
     navigate(ENDPOINTS.SIGNIN);
   };
+  const showListings = () => {
+    navigate(ENDPOINTS.USER_LISTINGS);
+  }
   const goToCreateListing = () => navigate(ENDPOINTS.CREATE_LISTING);
   return {
     deleteAccount,
@@ -139,5 +142,6 @@ export const useProfileController = () => {
     updateProfile,
     signOut,
     goToCreateListing,
+    showListings,
   };
 };

@@ -6,5 +6,7 @@ const ENDPOINTS = {
   ABOUT: "/about",
   CREATE_LISTING: "/create-listing",
   LISTING: "listing/:id",
+  USER_LISTINGS: "/listings",
+  EDIT_LISTING: "/edit-listing/:id",
 };
 export default ENDPOINTS;

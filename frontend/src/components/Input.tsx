@@ -18,10 +18,10 @@ interface ToggleSwitchProps {
   checked: boolean;
   onChange: (event: ChangeEvent<HTMLInputElement>) => void;
 }
-const Input: React.FC<Props> = ({ id, onChange, value }) => {
+const Input: React.FC<Props> = ({ id, onChange, value, type = "string" }) => {
   return (
     <input
-      type="text"
+      type={type}
       placeholder={id}
       id={id}
       name={id}

@@ -173,6 +173,7 @@ var googleSignIn = function (req, res, next) { return __awaiter(void 0, void 0, 
             case 2:
                 user = _d.sent();
                 if (!user) return [3 /*break*/, 3];
+                console.log("if");
                 token = jsonwebtoken_1.default.sign({ id: user._id }, process.env.JWT_SECRET);
                 _b = user._doc, password = _b.password, rest = __rest(_b, ["password"]);
                 res.status(200).json({
@@ -206,21 +207,26 @@ var googleSignIn = function (req, res, next) { return __awaiter(void 0, void 0, 
                 return [4 /*yield*/, newUser.save()];
             case 5:
                 _d.sent();
-                token = jsonwebtoken_1.default.sign({ id: newUser._id }, process.env.JWT_SECRET);
-                _c = newUser._doc, pass = _c.password, rest = __rest(_c, ["password"]);
-                res.status(200).json({
-                    success: true,
-                    message: "User logged in successfully",
-                    data: {
-                        user: {
-                            avatar: rest.avatar,
-                            email: rest.email,
-                            username: rest.username,
-                            id: rest._id,
+                if (newUser) {
+                    token = jsonwebtoken_1.default.sign({ id: newUser._id }, process.env.JWT_SECRET);
+                    _c = newUser._doc, pass = _c.password, rest = __rest(_c, ["password"]);
+                    res.status(200).json({
+                        success: true,
+                        message: "User logged in successfully",
+                        data: {
+                            user: {
+                                avatar: rest.avatar,
+                                email: rest.email,
+                                username: rest.username,
+                                id: rest._id,
+                            },
+                            token: token,
                         },
-                        token: token,
-                    },
-                });
+                    });
+                }
+                else {
+                    next((0, error_1.handleError)(500, "Something went wrong"));
+                }
                 _d.label = 6;
             case 6: return [3 /*break*/, 8];
             case 7:

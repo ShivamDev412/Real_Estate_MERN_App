@@ -1,11 +1,12 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   getDownloadURL,
   getStorage,
   ref,
   uploadBytesResumable,
 } from "firebase/storage";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux/es/hooks/useDispatch";
 import { useSelector } from "react-redux/es/hooks/useSelector";
 import {
   listingInitialState,
@@ -14,17 +15,35 @@ import {
 import { validateListing } from "../../utils/validations";
 import { app } from "../../utils/firebaseAuth";
 import Toast from "../../utils/toastMessage";
-import { postApiCall } from "../../utils/apiCalls";
+import { getApiCall, postApiCall, putApiCall } from "../../utils/apiCalls";
 import { RootState } from "../../redux/reducers";
+import { setListing } from "../../redux/slice/listing/newListing";
 
-export const createListingController = () => {
-  const [listing, setListing] = useState(listingInitialState);
+export const useCreateListingController = () => {
+  const { pathname } = useLocation();
+  const listingId = pathname.split("/")[2];
+  const dispatch = useDispatch();
   const [files, setFiles] = useState<FileList | null>(null);
   const [formError, setFormError] = useState(listingInitialStateError);
   const [disableUpload, setDisableUpload] = useState(true);
   const [loading, setLoading] = useState<boolean>(false);
   const { currentUser } = useSelector((state: RootState) => state.user);
+  const { listing } = useSelector((state: RootState) => state.listing);
   const navigate = useNavigate();
+  const getListingData = async () => {
+    try {
+      const res = await getApiCall(`/api/listing/${listingId}`);
+      if (res.success) {
+        const { _id, __v, createdAt, updatedAt, ...listingData } = res.data;
+        dispatch(setListing(listingData));
+      }
+    } catch (e: any) {
+      Toast(e.message, "error");
+    }
+  };
+  useEffect(() => {
+    if (listingId) getListingData();
+  }, [listingId]);
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
@@ -42,20 +61,20 @@ export const createListingController = () => {
         setFiles(selectedFiles);
       }
     } else {
-      setListing({
-        ...listing,
-        [e.target.id]:
-          e.target.type === "text" || e.target instanceof HTMLTextAreaElement
-            ? e.target.value
-            : Number(e.target.value),
-      });
+      dispatch(
+        setListing({
+          ...listing,
+          [e.target.id]:
+            e.target.type === "text" || e.target instanceof HTMLTextAreaElement
+              ? e.target.value
+              : Number(e.target.value),
+        })
+      );
     }
   };
-
   const handleToggleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setListing({ ...listing, [e.target.id]: e.target.checked });
+    dispatch(setListing({ ...listing, [e.target.id]: e.target.checked }));
   };
-
   const createListing = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const validationErrors = validateListing(listing);
@@ -65,16 +84,18 @@ export const createListingController = () => {
         const listingToSend = {
           ...listing,
           discountPrice: !listing.offer ? undefined : listing.discountPrice,
-          userRef: currentUser.data.user.id,
+          userRef: listing.userRef ? listing.userRef : currentUser.data.user.id,
         };
-        const res = await postApiCall(
-          `/api/listing/create-listing`,
-          listingToSend
-        );
+        const url = !listingId
+          ? "/api/listing/create-listing"
+          : `/api/listing/update-listing/${listingId}`;
+        const res = await (listingId
+          ? putApiCall(url, listingToSend)
+          : postApiCall(url, listingToSend));
         if (res.success) {
           Toast(res.message, "success");
-          navigate(`/listing/${res.data._id}`);
-          setListing(listingInitialState);
+          navigate(`/listings`);
+          dispatch(setListing(listingInitialState));
           setFormError(listingInitialStateError);
         } else {
           Toast(res.message, "error");
@@ -97,7 +118,12 @@ export const createListingController = () => {
         });
         Promise.all(promises)
           .then((urls: any) => {
-            setListing({ ...listing, imageUrl: listing.imageUrl.concat(urls) });
+            dispatch(
+              setListing({
+                ...listing,
+                imageUrl: listing.imageUrl.concat(urls),
+              })
+            );
             setLoading(false);
             setFiles(null);
             setDisableUpload(true);
@@ -144,12 +170,16 @@ export const createListingController = () => {
     });
   };
   const deleteImage = (imgUrl: string) => {
-    setListing({
-      ...listing,
-      imageUrl: listing.imageUrl.filter((image: string) => image !== imgUrl),
-    });
+    dispatch(
+      setListing({
+        ...listing,
+        imageUrl: listing.imageUrl.filter((image: string) => image !== imgUrl),
+      })
+    );
   };
-
+  const goBack = () => {
+    navigate(-1);
+  };
   return {
     files,
     disableUpload,
@@ -161,5 +191,7 @@ export const createListingController = () => {
     formError,
     loading,
     deleteImage,
+    listingId,
+    goBack,
   };
 };

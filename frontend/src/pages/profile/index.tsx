@@ -14,6 +14,7 @@ function Profile() {
     deleteAccount,
     signOut,
     goToCreateListing,
+    showListings,
   } = useProfileController();
   return (
     <div className="w-[90%] sm:w-[60%] md:w-[50%] mx-auto">
@@ -82,13 +83,30 @@ function Profile() {
         disabled={false}
         onClick={goToCreateListing}
       />
-      <div className="flex justify-between items-center my-3">
-        <button className="text-red-700" onClick={deleteAccount}>
-          Delete Account
-        </button>
-        <button className="text-red-700" onClick={signOut}>
-          Sign Out
-        </button>
+      <div className="my-4">
+        <Button
+          value="Show Listings"
+          type="button"
+          className="bg-green-700"
+          disabled={false}
+          onClick={showListings}
+        />
+      </div>
+      <div className="flex justify-between items-center my-3 gap-[6rem]">
+        <Button
+          value="Delete Account"
+          type="button"
+          className="bg-red-700"
+          disabled={false}
+          onClick={deleteAccount}
+        />
+        <Button
+          value="Sign Out"
+          type="button"
+          className="bg-red-700"
+          disabled={false}
+          onClick={signOut}
+        />
       </div>
     </div>
   );

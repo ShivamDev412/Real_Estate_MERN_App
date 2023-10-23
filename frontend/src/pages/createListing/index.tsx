@@ -1,5 +1,5 @@
 import React from "react";
-import { createListingController } from "./controller";
+import { useCreateListingController } from "./controller";
 import Input, {
   NumberInput,
   Textarea,
@@ -20,11 +20,14 @@ function CreateListing() {
     loading,
     files,
     deleteImage,
-  } = createListingController();
+    listingId,
+    goBack,
+  
+  } = useCreateListingController();
   return (
     <main className="px-3 py-7">
       <h1 className="text-3xl font-semibold text-center my-7">
-        Create A Listing
+        {listingId ? "Update Listing" : "Create A Listing"}
       </h1>
       <form className="" onSubmit={createListing}>
         <div className="flex flex-col w-full md:flex-row lg:w-[80%] mx-auto justify-between my-4 gap-4">
@@ -155,10 +158,17 @@ function CreateListing() {
             />
           </div>
         </div>
-        <div className="w-1/2 md:w-1/4 mx-auto">
+        <div className="flex mx-auto gap-3 w-full sm:w-1/2 mt-[40px]">
           <Button
-            value={"Create Listing"}
-            type="submit"
+            value={"Cancel"}
+            type="button"
+            disabled={loading}
+            onClick={goBack}
+            className="bg-red-700"
+          />
+          <Button
+            value={listingId ? "Update Listing" : "Create Listing"}
+            type={"submit"}
             disabled={loading}
             className="bg-slate-700"
           />

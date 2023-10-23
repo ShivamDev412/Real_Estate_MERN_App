@@ -28,7 +28,7 @@ export const listingInitialState: ListingType = {
   name: "",
   description: "",
   address: "",
-  regularPrice: 50,
+  regularPrice: 500,
   discountPrice: 0,
   bathroom: 1,
   bedroom: 1,

@@ -1,7 +1,7 @@
 import React from "react";
 import { twMerge } from "tailwind-merge";
 
-type ButtonType = "button" | "submit" | "reset";
+type ButtonType = "button" | "submit" ;
 
 interface Props {
   value: string;
