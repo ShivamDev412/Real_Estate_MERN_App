@@ -1,21 +1,14 @@
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-
+import { carouselSettings } from "../utils/constant";
 
 const Carousel = ({ imageUrl }: { imageUrl: string[] }) => {
-    const settings = {
-      infinite: true,
-      speed: 500,
-      slidesToShow: 1,
-      slidesToScroll: 1,
-      autoplay: true,
-      arrows: false,
-    };
-    return (
-      <div className="h-[12rem] w-full">
-        <Slider {...settings}>
-          {imageUrl?.length && imageUrl?.map((url: string, index: number) => (
+  return (
+    <div className="h-[12rem] w-full">
+      <Slider {...carouselSettings}>
+        {imageUrl?.length &&
+          imageUrl?.map((url: string, index: number) => (
             <div className="h-[12rem] w-full" key={url}>
               <img
                 key={index}
@@ -25,8 +18,8 @@ const Carousel = ({ imageUrl }: { imageUrl: string[] }) => {
               />
             </div>
           ))}
-        </Slider>
-      </div>
-    );
-  };
-  export default Carousel;
+      </Slider>
+    </div>
+  );
+};
+export default Carousel;

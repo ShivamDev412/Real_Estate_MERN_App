@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { listingFilterInitialState } from "../../../utils/constant";
 export interface ListingFilter {
   regularPrice: number | boolean;
   discountPrice: number | boolean;
@@ -15,17 +16,7 @@ export interface InitialStateProps {
   queryString: string;
 }
 const initialState: InitialStateProps = {
-  listingFilter: {
-    regularPrice: 0,
-    discountPrice: 0,
-    bathroom: 0,
-    bedroom: 0,
-    furnished: false,
-    parking: false,
-    rent: false,
-    offer: false,
-    sale: false,
-  },
+  listingFilter: listingFilterInitialState,
   queryString: "",
 };
 

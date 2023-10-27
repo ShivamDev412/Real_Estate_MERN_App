@@ -1,5 +1,5 @@
 import Button from "../../components/Button";
-import Input from "../../components/Input";
+import Input, { PhoneNoInput } from "../../components/Input";
 import { useProfileController } from "./controller";
 function Profile() {
   const {
@@ -12,12 +12,11 @@ function Profile() {
     setFile,
     fileUploadStatus,
     deleteAccount,
-    signOut,
-    goToCreateListing,
-    showListings,
+    profileError,
+    countryCodeValue,
   } = useProfileController();
   return (
-    <div className="w-[90%] sm:w-[60%] md:w-[50%] mx-auto">
+    <div className="w-[90%] sm:w-[60%] md:w-[30%] mx-auto pb-6">
       <h1 className="text-3xl font-semibold text-center my-7">My Profile</h1>
       <form
         className="flex flex-col w-full gap-4 my-4"
@@ -49,19 +48,56 @@ function Profile() {
             File uploaded successfully
           </p>
         )}
+        <div className="flex flex-col md:flex-row items-center w-full justify-between gap-2">
+          <div className="w-full">
+            <Input
+              id="firstName"
+              onChange={handleInputChange}
+              value={profile.firstName}
+            />
+            {profileError.firstName && (
+              <div className="text-red-500">{profileError.firstName}</div>
+            )}
+          </div>
+          <div className="w-full">
+            <Input
+              id="lastName"
+              onChange={handleInputChange}
+              value={profile.lastName}
+            />
+            {profileError.lastName && (
+              <div className="text-red-500">{profileError.lastName}</div>
+            )}
+          </div>
+        </div>
         <Input
           id="username"
           onChange={handleInputChange}
           value={profile.username}
         />
-
+        {profileError.username && (
+          <div className="text-red-500">{profileError.username}</div>
+        )}
         <Input
           id="email"
           type="email"
           onChange={handleInputChange}
           value={profile.email}
         />
+        {profileError.email && (
+          <div className="text-red-500">{profileError.email}</div>
+        )}
 
+        <PhoneNoInput
+          id="phoneNo"
+          onChange={handleInputChange}
+          value={profile.phoneNo}
+          code={profile.countryCode}
+          countryCodeValue={countryCodeValue}
+        />
+        {profileError.phoneNo && (
+          <div className="text-red-500">{profileError.phoneNo}</div>
+        )}
         <Input
           id="password"
           type="password"
@@ -76,36 +112,13 @@ function Profile() {
           disabled={loading}
         />
       </form>
-      <Button
-        value="Create Listing"
-        type="button"
-        className="bg-green-700"
-        disabled={false}
-        onClick={goToCreateListing}
-      />
-      <div className="my-4">
-        <Button
-          value="Show Listings"
-          type="button"
-          className="bg-green-700"
-          disabled={false}
-          onClick={showListings}
-        />
-      </div>
-      <div className="flex justify-between items-center my-3 gap-[6rem]">
+      <div className="flex justify-between items-center my-3 xs:gap-[1rem] lg:gap-[6rem]">
         <Button
           value="Delete Account"
           type="button"
           className="bg-red-700"
           disabled={false}
           onClick={deleteAccount}
-        />
-        <Button
-          value="Sign Out"
-          type="button"
-          className="bg-red-700"
-          disabled={false}
-          onClick={signOut}
         />
       </div>
     </div>

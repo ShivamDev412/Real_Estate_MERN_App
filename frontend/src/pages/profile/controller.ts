@@ -21,22 +21,45 @@ import {
 } from "../../redux/slice/user/userSlice";
 import { postApiCall, deleteApiCall } from "../../utils/apiCalls";
 import ENDPOINTS from "../../utils/endpoints";
+import { validateProfile } from "../../utils/validations";
 
 export const useProfileController = () => {
   const navigate = useNavigate();
   const { currentUser, loading } = useSelector(
     (state: RootState) => state.user
   );
+  const [countryCode, setCountryCode] = useState(
+    currentUser.data.user.phoneNo?.split(" ")[0]
+  );
   const dispatch = useDispatch();
   const initialProfile = {
+    firstName: currentUser.data.user.firstName
+      ? currentUser.data.user.firstName
+      : "",
+    lastName: currentUser.data.user.lastName
+      ? currentUser.data.user.lastName
+      : "",
+    phoneNo: currentUser.data.user.phoneNo
+      ? currentUser.data.user.phoneNo.split(" ")[1]
+      : "",
     username: currentUser.data.user.username
       ? currentUser.data.user.username
+      : "",
+    countryCode: currentUser.data.user.phoneNo
+      ? currentUser.data.user.phoneNo?.split(" ")[0]
       : "",
     email: currentUser.data.user.email ? currentUser.data.user.email : "",
     password: "",
     avatar: currentUser.data.user.avatar ? currentUser.data.user.avatar : "",
   };
   const [profile, setProfile] = useState<any>(initialProfile);
+  const [profileError, setProfileError] = useState<any>({
+    firstName: "",
+    lastName: "",
+    phoneNo: "",
+    username: "",
+    email: "",
+  });
   const fileRef = useRef<HTMLInputElement>(null);
   const [file, setFile] = useState<any>(undefined);
   const [fileUploadStatus, setFileUploadStatus] = useState<number>(0);
@@ -75,29 +98,45 @@ export const useProfileController = () => {
   };
   const updateProfile = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    dispatch(updateUserStart());
-    try {
-      console.log(profile);
-      const res = await postApiCall(
-        `/api/user/update-user/${currentUser.data.user.id}`,
-        profile
-      );
-      if (res.success) {
-        dispatch(updateUserSuccess(res));
-        setProfile({
-          username: res.data.user.username,
-          email: res.data.user.email,
-          password: "",
-          avatar: res.data.user.avatar,
-        });
-        Toast("Profile updated successfully", "success");
-      } else {
-        Toast(res.message, "error");
+    const validateProfileErrors = validateProfile(
+      profile.firstName,
+      profile.lastName,
+      profile.username,
+      profile.email,
+      profile.phoneNo
+    );
+    setProfileError(validateProfileErrors);
+    if (Object.keys(validateProfileErrors).length === 0) {
+      dispatch(updateUserStart());
+      try {
+        const res = await postApiCall(
+          `/api/user/update-user/${currentUser.data.user.id}`,
+          {
+            ...profile,
+            phoneNo: `${countryCode} ${profile.phoneNo}`,
+          }
+        );
+        if (res.success) {
+          dispatch(updateUserSuccess(res));
+          setProfile({
+            username: res.data.user.username,
+            email: res.data.user.email,
+            phoneNo: res.data.user.phoneNo.split(" ")[1],
+            countryCode: res.data.user.phoneNo.split(" ")[0],
+            firstName: res.data.user.firstName,
+            lastName: res.data.user.lastName,
+            password: "",
+            avatar: res.data.user.avatar,
+          });
+          Toast("Profile updated successfully", "success");
+        } else {
+          Toast(res.message, "error");
+          dispatch(updateUserFailure());
+        }
+      } catch (err: any) {
+        Toast(err.message, "error");
         dispatch(updateUserFailure());
       }
-    } catch (err: any) {
-      Toast(err.message, "error");
-      dispatch(updateUserFailure());
     }
   };
   const deleteAccount = async () => {
@@ -126,10 +165,9 @@ export const useProfileController = () => {
     Cookies.remove("access-token", { path: "/" });
     navigate(ENDPOINTS.SIGNIN);
   };
-  const showListings = () => {
-    navigate(ENDPOINTS.USER_LISTINGS);
-  }
-  const goToCreateListing = () => navigate(ENDPOINTS.CREATE_LISTING);
+  const countryCodeValue = (countryCode: string) => {
+    setCountryCode(countryCode);
+  };
   return {
     deleteAccount,
     loading,
@@ -141,7 +179,7 @@ export const useProfileController = () => {
     profile,
     updateProfile,
     signOut,
-    goToCreateListing,
-    showListings,
+    profileError,
+    countryCodeValue,
   };
 };

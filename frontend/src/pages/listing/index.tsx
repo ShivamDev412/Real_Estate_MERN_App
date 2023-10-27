@@ -1,8 +1,10 @@
+import { BsFillHouseAddFill } from "react-icons/bs";
 import { useListingController } from "./controller";
 import { ListingType } from "../../redux/slice/listing/listingSlice";
 import Carousel from "../../components/Carousel";
 import Filter from "../../components/Filter";
 import Pagination from "../../components/Pagination";
+import Button from "../../components/Button";
 
 interface Listing extends ListingType {
   deleteListing: (e: React.MouseEvent<HTMLButtonElement>, id: string) => void;
@@ -23,7 +25,7 @@ const ListingCard: React.FC<Listing> = ({
 }) => {
   return (
     <div
-      className="w-full md:w-[48%] lg:w-[32.3%] rounded-lg shadow-xl bg-white hover:cursor-pointer"
+      className="w-full md:w-[48%] lg:w-[31%] rounded-lg shadow-xl bg-white hover:cursor-pointer"
       onClick={(e) => listingDetail(e, _id)}
     >
       <Carousel imageUrl={imageUrl} />
@@ -82,24 +84,40 @@ function Listing() {
     totalCount,
     onPageChange,
     pageNo,
+    goToCreateListing,
+    closeFilter
   } = useListingController();
   return (
-    <div className="py-4 w-[80%] mx-auto my-4">
-      <div className="flex justify-between items-center">
+    <div className="py-4 w-[90%] mx-auto my-4 sm:w-[80%]">
+      <div className="flex justify-between items-center flex-wrap">
         <h2 className="text-3xl font-bold">Your Listings</h2>
-        <Filter
-          showFilter={showFilter}
-          toggleFilter={toggleFilter}
-          listingFilter={listingFilter}
-          handleToggleInputChange={handleToggleInputChange}
-          handlePriceFilter={handlePriceFilter}
-          clearFilter={clearFilter}
-          applyFilter={() => applyFilter(pageNo)}
-          activeFilterCount={activeFilterCount}
-        />
+        <div className="flex gap-2 my-3">
+          <Filter
+            showFilter={showFilter}
+            toggleFilter={toggleFilter}
+            listingFilter={listingFilter}
+            handleToggleInputChange={handleToggleInputChange}
+            handlePriceFilter={handlePriceFilter}
+            clearFilter={clearFilter}
+            applyFilter={() => applyFilter(pageNo)}
+            activeFilterCount={activeFilterCount}
+            closeFilter={closeFilter}
+          />
+          <Button
+            value={
+              <>
+                <BsFillHouseAddFill /> Create Listing
+              </>
+            }
+            type="button"
+            className="bg-green-700 p-2 w-fit flex items-center gap-1 capitalize"
+            disabled={false}
+            onClick={goToCreateListing}
+          />
+        </div>
       </div>
 
-      <div className="flex flex-wrap gap-3 2xl:gap-6 my-4">
+      <div className="flex flex-wrap gap-6 lg:gap-[3.5%] my-6">
         {listings?.length ? (
           listings.map((listing) => (
             <ListingCard
@@ -114,14 +132,17 @@ function Listing() {
           <div>No listings available</div>
         )}
       </div>
-      <div className="flex justify-end mt-[50px]">
-      <Pagination
-        pageNo={pageNo}
-        totalPageCount={Math.ceil(totalCount / 9)}
-        onPageChange={onPageChange}
-      />
-      </div>
-    
+      {totalCount > 9 ? (
+        <div className="flex justify-end mt-[50px]">
+          <Pagination
+            pageNo={pageNo}
+            totalPageCount={Math.ceil(totalCount / 9)}
+            onPageChange={onPageChange}
+          />
+        </div>
+      ) : (
+        <></>
+      )}
     </div>
   );
 }

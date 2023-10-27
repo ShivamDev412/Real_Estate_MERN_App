@@ -15,7 +15,8 @@ import {
 } from "../../redux/slice/listing/listingFilter";
 import Toast from "../../utils/toastMessage";
 import { ListingFilter } from "../../redux/slice/listing/listingFilter";
-
+import { listingFilterInitialState } from "../../utils/constant";
+import ENDPOINTS from "../../utils/endpoints";
 export const useListingController = () => {
   const dispatch = useDispatch();
   const navigation = useNavigate();
@@ -44,16 +45,19 @@ export const useListingController = () => {
     dispatch(setPageNo(page));
     applyFilter(page);
   };
-  const applyFilter = (pageNo: number) => {
-    const filteredFilter: ListingFilter = Object.keys(listingFilter)
+  const applyFilter = (
+    pageNo: number,
+    listingFilterData: ListingFilter = listingFilter
+  ) => {
+    const filteredFilter: ListingFilter = Object.keys(listingFilterData)
       .filter(
         (key) =>
-          listingFilter[key as keyof ListingFilter] !== false &&
-          listingFilter[key as keyof ListingFilter] !== 0
+          listingFilterData[key as keyof ListingFilter] !== false &&
+          listingFilterData[key as keyof ListingFilter] !== 0
       )
       .reduce((obj, key) => {
         obj[key as keyof ListingFilter] =
-          listingFilter[key as keyof ListingFilter];
+          listingFilterData[key as keyof ListingFilter];
         return obj;
       }, {} as ListingFilter);
     setActiveFilterCount(Object.keys(filteredFilter).length);
@@ -125,22 +129,15 @@ export const useListingController = () => {
     );
   };
   const clearFilter = () => {
-    dispatch(
-      setListingFilter({
-        regularPrice: 0,
-        discountPrice: 0,
-        bathroom: 0,
-        bedroom: 0,
-        furnished: false,
-        parking: false,
-        rent: false,
-        offer: false,
-        sale: false,
-      })
-    );
+    dispatch(setListingFilter(listingFilterInitialState));
+    closeFilter()
     setActiveFilterCount(0);
+    applyFilter(pageNo, listingFilterInitialState);
   };
-
+  const closeFilter = () => {
+    setShowFilter(false);
+  }
+  const goToCreateListing = () => navigation(ENDPOINTS.CREATE_LISTING);
   return {
     listings,
     deleteListing,
@@ -158,5 +155,7 @@ export const useListingController = () => {
     onPageChange,
     pageNo,
     totalCount,
+    goToCreateListing,
+    closeFilter,
   };
 };

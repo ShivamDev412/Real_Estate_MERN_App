@@ -22,7 +22,6 @@ function CreateListing() {
     deleteImage,
     listingId,
     goBack,
-  
   } = useCreateListingController();
   return (
     <main className="px-3 py-7">
@@ -83,6 +82,26 @@ function CreateListing() {
                 checked={listing.parking}
                 onChange={(e) => handleToggleInputChange(e)}
               />
+              {listing.rent ? (
+                <ToggleSwitch
+                  id="wifi"
+                  checked={listing.wifi}
+                  onChange={(e) => handleToggleInputChange(e)}
+                />
+              ) : (
+                <>
+                  <ToggleSwitch
+                    id="gym"
+                    checked={listing.gym}
+                    onChange={(e) => handleToggleInputChange(e)}
+                  />
+                  <ToggleSwitch
+                    id="swimmingPool"
+                    checked={listing.swimmingPool}
+                    onChange={(e) => handleToggleInputChange(e)}
+                  />
+                </>
+              )}
             </div>
             <div className="flex gap-2 justify-between ">
               <div className="w-full">
@@ -122,7 +141,7 @@ function CreateListing() {
               type="number"
               min={50}
               max={1000000}
-              label={"Regular Price ($ / month)"}
+              label={`Regular Price ${listing.rent ? "($ / month)" : ""}`}
               onChange={(e) => handleInputChange(e)}
             />
             {formError?.regularPrice && (
@@ -136,7 +155,9 @@ function CreateListing() {
                   type="number"
                   min={0}
                   max={1000000}
-                  label={"Discounted Price ($ / month)"}
+                  label={`Discounted Price ${
+                    listing.rent ? "($ / month)" : ""
+                  }`}
                   onChange={(e) => handleInputChange(e)}
                 />
                 {formError?.discountPrice && (

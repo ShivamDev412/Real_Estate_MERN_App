@@ -9,6 +9,7 @@ import { postApiCall } from "../../utils/apiCalls";
 export const useSignupController = () => {
   const [newUser, setNewUser] = useState(signUpInitialState);
   const [formError, setFormError] = useState(signUpInitialState);
+  const [countryCode, setCountryCode] = useState("+1");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -20,14 +21,21 @@ export const useSignupController = () => {
     const validationErrors = validateForm(
       newUser.username,
       newUser.email,
-      newUser.password
+      newUser.password,
+      newUser.firstName,
+      newUser.lastName,
+      newUser.phoneNo
     );
     setFormError(validationErrors);
 
     if (Object.keys(validationErrors).length === 0) {
+      const dataToSend = {
+        ...newUser,
+        phoneNo: `${countryCode} ${newUser.phoneNo}`,
+      };
       try {
         setLoading(true);
-        const data = await postApiCall("/api/auth/signup", newUser);
+        const data = await postApiCall("/api/auth/signup", dataToSend);
         if (data.success) {
           Toast("Sign-up successful", "success");
           navigate(ENDPOINTS.SIGNIN);
@@ -42,11 +50,15 @@ export const useSignupController = () => {
       }
     }
   };
+  const countryCodeValue = (countryCode: string) => {
+    setCountryCode(countryCode);
+  };
   return {
     handleInputChange,
     handleSubmit,
     newUser,
     formError,
     loading,
+    countryCodeValue,
   };
 };

@@ -71,7 +71,8 @@ export const useSignInController = () => {
       const auth = getAuth(app);
       const result = await signInWithPopup(auth, provider);
       const res = await postApiCall("/api/auth/google", {
-        name: result.user.displayName,
+        firstName: result.user.displayName?.split(" ")[0],
+        lastName: result.user.displayName?.split(" ")[1] || "",
         email: result.user.email,
         image: result.user.photoURL,
       });

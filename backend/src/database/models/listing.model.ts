@@ -12,6 +12,9 @@ interface Listing extends Document {
   parking: boolean;
   type: string;
   offer: boolean;
+  gym: boolean;
+  swimmingPool: boolean;
+  wifi: boolean;
   imageUrl: Array<string>;
   userRef: string;
 }
@@ -64,6 +67,18 @@ const ListingSchema = new mongoose.Schema(
       required: true,
     },
     offer: {
+      type: Boolean,
+      required: true,
+    },
+    gym: {
+      type: Boolean,
+      required: true,
+    },
+    swimmingPool: {
+      type: Boolean,
+      required: true,
+    },
+    wifi: {
       type: Boolean,
       required: true,
     },

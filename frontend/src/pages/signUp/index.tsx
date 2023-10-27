@@ -1,18 +1,48 @@
 import { Link } from "react-router-dom";
 import Input from "../../components/Input";
+import { PhoneNoInput } from "../../components/Input";
 import Button from "../../components/Button";
 import ENDPOINTS from "../../utils/endpoints";
 import { useSignupController } from "./controller";
 import { useSignInController } from "../signIn/controller";
 
 function SignUp() {
-  const { handleInputChange, handleSubmit, newUser, formError, loading } =
-    useSignupController();
+  const {
+    handleInputChange,
+    handleSubmit,
+    newUser,
+    formError,
+    loading,
+    countryCodeValue,
+  } = useSignupController();
   const { handleGoogleAuth } = useSignInController();
   return (
     <div className="p-3 max-w-lg mx-auto">
       <h1 className="text-3xl text-center font-semibold my-7">Sign Up</h1>
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+        <div className="flex items-center w-full justify-between gap-2">
+          <div className="w-full">
+            <Input
+              id="firstName"
+              onChange={handleInputChange}
+              value={newUser.firstName}
+            />
+            {formError.firstName && (
+              <div className="text-red-500">{formError.firstName}</div>
+            )}
+          </div>
+          <div className="w-full">
+            <Input
+              id="lastName"
+              onChange={handleInputChange}
+              value={newUser.lastName}
+            />
+            {formError.lastName && (
+              <div className="text-red-500">{formError.lastName}</div>
+            )}
+          </div>
+        </div>
+
         <Input
           id="username"
           onChange={handleInputChange}
@@ -29,6 +59,15 @@ function SignUp() {
         />
         {formError.email && (
           <div className="text-red-500">{formError.email}</div>
+        )}
+        <PhoneNoInput
+          id="phoneNo"
+          onChange={handleInputChange}
+          value={newUser.phoneNo}
+          countryCodeValue={countryCodeValue}
+        />
+        {formError.phoneNo && (
+          <div className="text-red-500">{formError.phoneNo}</div>
         )}
         <Input
           id="password"

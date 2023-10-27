@@ -2,6 +2,8 @@ const ENDPOINTS = {
   LOGIN: "/signin",
   LOGOUT: "/logout",
   SIGNUP: "/signup",
+  FORGOT_PASSWORD: "/forgot-password",
+  RESET_PASSWORD:"/reset-password/:resetToken",
   GOOGLE: "/google",
   UPDATE_USER: "/update-user/:id",
   DELETE_USER: "/delete-user/:id",

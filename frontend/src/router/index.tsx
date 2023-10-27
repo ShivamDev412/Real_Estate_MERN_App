@@ -10,8 +10,14 @@ const ProfilePage = React.lazy(() => import("../pages/profile"));
 const AboutPage = React.lazy(() => import("../pages/About"));
 const CreateListing = React.lazy(() => import("../pages/createListing"));
 const EditListing = React.lazy(() => import("../pages/createListing"));
-const ListingPage = React.lazy(() => import("../pages/listing/listing"));
+const ListingPage = React.lazy(() => import("../pages/listing/listingDetail"));
 const ListingsPage = React.lazy(() => import("../pages/listing"));
+const SettingsPage = React.lazy(() => import("../pages/settings"));
+const ChangePasswordPage = React.lazy(() => import("../pages/changePassword"));
+const ForgotPasswordPage = React.lazy(() => import("../pages/forgotPassword"));
+const ResetPasswordPage = React.lazy(
+  () => import("../pages/forgotPassword/resetPassword")
+);
 function Router() {
   const {
     HOME,
@@ -23,10 +29,20 @@ function Router() {
     LISTING,
     USER_LISTINGS,
     EDIT_LISTING,
+    SETTINGS,
+    CHANGE_PASSWORD,
+    FORGOT_PASSWORD,
+    RESET_PASSWORD,
   } = ENDPOINTS;
   return (
     <BrowserRouter>
       <Routes>
+        <Route element={<PublicRoute />}>
+          <Route path={FORGOT_PASSWORD} element={<ForgotPasswordPage />} />
+        </Route>
+        <Route element={<PublicRoute />}>
+          <Route path={RESET_PASSWORD} element={<ResetPasswordPage />} />
+        </Route>
         <Route element={<PublicRoute />}>
           <Route path={SIGNIN} element={<SignInPage />} />
         </Route>
@@ -50,6 +66,12 @@ function Router() {
         </Route>
         <Route element={<PrivateRoute />}>
           <Route path={USER_LISTINGS} element={<ListingsPage />} />
+        </Route>
+        <Route element={<PrivateRoute />}>
+          <Route path={SETTINGS} element={<SettingsPage />} />
+        </Route>
+        <Route element={<PrivateRoute />}>
+          <Route path={CHANGE_PASSWORD} element={<ChangePasswordPage />} />
         </Route>
         <Route element={<PrivateRoute />}>
           <Route path={HOME} element={<HomePage />} />

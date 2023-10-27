@@ -21,6 +21,9 @@ export const updateUserProfile = async (
       {
         $set: {
           username: request.body.username,
+          firstName: request.body.firstName,
+          lastName: request.body.lastName,
+          phoneNo: request.body.phoneNo,
           password:
             request.body.password === ""
               ? user?.password
@@ -43,6 +46,9 @@ export const updateUserProfile = async (
           email: rest.email,
           username: rest.username,
           avatar: rest.avatar,
+          firstName: rest.firstName,
+          lastName: rest.lastName,
+          phoneNo: rest.phoneNo,
           id: rest._id,
         },
       },
@@ -106,6 +112,9 @@ export const showUserListings = async (
       "parking",
       "rent",
       "sale",
+      "wifi",
+      "gym",
+      "swimmingPool",
     ];
     filterFields.forEach((field) => {
       const queryParam = request.query[field] as string | string[] | undefined;

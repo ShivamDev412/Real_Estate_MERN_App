@@ -42,6 +42,11 @@ export const useCreateListingController = () => {
     }
   };
   useEffect(() => {
+    if (pathname.split("/")[1] === "create-listing") {
+      dispatch(setListing(listingInitialState));
+    }
+  }, []);
+  useEffect(() => {
     if (listingId) getListingData();
   }, [listingId]);
   const handleInputChange = (
@@ -84,6 +89,9 @@ export const useCreateListingController = () => {
         const listingToSend = {
           ...listing,
           discountPrice: !listing.offer ? undefined : listing.discountPrice,
+          wifi: listing.rent ? listing.wifi : false,
+          gym: listing.rent ? false : listing.gym,
+          swimmingPool: listing.rent ? false : listing.swimmingPool,
           userRef: listing.userRef ? listing.userRef : currentUser.data.user.id,
         };
         const url = !listingId

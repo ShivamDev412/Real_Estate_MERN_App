@@ -6,7 +6,10 @@ type CurrentUserType = {
       avatar: string;
       email: string;
       id: string;
+      phoneNo:string,
       username: string;
+      firstName: string;
+      lastName: string;
     };
   };
 };
@@ -22,7 +25,10 @@ const initialState: InitialStateProps = {
         avatar: "",
         email: "",
         id: "",
+        phoneNo:"",
         username: "",
+        firstName: "",
+        lastName: "",
       },
     },
   },

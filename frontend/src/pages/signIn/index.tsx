@@ -57,6 +57,12 @@ function SignIn() {
           Sign Up
         </Link>
       </div>
+      <div className="flex gap-2 mt-5">
+        <p>Can't remember your password?</p>
+        <Link to={ENDPOINTS.FORGOT_PASSWORD} className="text-blue-700">
+          Forgot Password
+        </Link>
+      </div>
     </div>
   );
 }

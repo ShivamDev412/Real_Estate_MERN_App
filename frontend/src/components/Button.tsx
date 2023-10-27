@@ -4,7 +4,7 @@ import { twMerge } from "tailwind-merge";
 type ButtonType = "button" | "submit" ;
 
 interface Props {
-  value: string;
+  value: string | any;
   type?: ButtonType;
   className?: string;
   disabled: boolean;
