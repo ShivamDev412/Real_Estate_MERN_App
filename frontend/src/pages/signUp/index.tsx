@@ -5,6 +5,7 @@ import Button from "../../components/Button";
 import ENDPOINTS from "../../utils/endpoints";
 import { useSignupController } from "./controller";
 import { useSignInController } from "../signIn/controller";
+import FormWrapper from "../../wrappers/formWrapper";
 
 function SignUp() {
   const {
@@ -17,7 +18,7 @@ function SignUp() {
   } = useSignupController();
   const { handleGoogleAuth } = useSignInController();
   return (
-    <div className="p-3 max-w-lg mx-auto">
+    <FormWrapper>
       <h1 className="text-3xl text-center font-semibold my-7">Sign Up</h1>
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
         <div className="flex items-center w-full justify-between gap-2">
@@ -100,7 +101,7 @@ function SignUp() {
           Sign In
         </Link>
       </div>
-    </div>
+    </FormWrapper>
   );
 }
 

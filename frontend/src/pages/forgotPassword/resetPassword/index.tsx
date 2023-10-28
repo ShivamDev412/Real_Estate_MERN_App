@@ -1,5 +1,6 @@
 import Button from "../../../components/Button";
 import Input from "../../../components/Input";
+import FormWrapper from "../../../wrappers/formWrapper";
 import { useResetPasswordController } from "./controller";
 function ResetPassword() {
   const {
@@ -10,7 +11,7 @@ function ResetPassword() {
     loading,
   } = useResetPasswordController();
   return (
-    <div className="p-3 max-w-lg mx-auto">
+    <FormWrapper>
       <h1 className="text-3xl text-center font-semibold my-7">
         Reset Password
       </h1>
@@ -42,7 +43,7 @@ function ResetPassword() {
           disabled={loading}
         />
       </form>
-    </div>
+    </FormWrapper>
   );
 }
 

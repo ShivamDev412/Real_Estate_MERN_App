@@ -4,6 +4,7 @@ import Button from "../../components/Button";
 import ENDPOINTS from "../../utils/endpoints";
 
 import { useSignInController } from "./controller";
+import FormWrapper from "../../wrappers/formWrapper";
 
 function SignIn() {
   const {
@@ -15,7 +16,7 @@ function SignIn() {
     handleGoogleAuth,
   } = useSignInController();
   return (
-    <div className="p-3 max-w-lg mx-auto">
+    <FormWrapper>
       <h1 className="text-3xl text-center font-semibold my-7">Sign In</h1>
       <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
         <Input
@@ -63,7 +64,7 @@ function SignIn() {
           Forgot Password
         </Link>
       </div>
-    </div>
+    </FormWrapper>
   );
 }
 

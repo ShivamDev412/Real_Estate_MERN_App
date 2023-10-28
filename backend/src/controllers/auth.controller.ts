@@ -2,7 +2,6 @@ import { Request, Response, NextFunction } from "express";
 import crypto from "crypto";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import nodemailer from "nodemailer";
 import User from "../database/models/user.model";
 import { handleError } from "../utils/error";
 import { UserDocument } from "../database/models/user.model";

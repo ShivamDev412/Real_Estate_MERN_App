@@ -6,6 +6,9 @@ import PublicRoute from "./publicRoute";
 const HomePage = React.lazy(() => import("../pages/Home"));
 const SignUpPage = React.lazy(() => import("../pages/signUp"));
 const SignInPage = React.lazy(() => import("../pages/signIn"));
+const UpdateProfilePage = React.lazy(
+  () => import("../pages/profile/updateProfile")
+);
 const ProfilePage = React.lazy(() => import("../pages/profile"));
 const AboutPage = React.lazy(() => import("../pages/About"));
 const CreateListing = React.lazy(() => import("../pages/createListing"));
@@ -33,6 +36,7 @@ function Router() {
     CHANGE_PASSWORD,
     FORGOT_PASSWORD,
     RESET_PASSWORD,
+    UPDATE_PROFILE,
   } = ENDPOINTS;
   return (
     <BrowserRouter>
@@ -51,6 +55,9 @@ function Router() {
         </Route>
         <Route element={<PrivateRoute />}>
           <Route path={PROFILE} element={<ProfilePage />} />
+        </Route>
+        <Route element={<PrivateRoute />}>
+          <Route path={UPDATE_PROFILE} element={<UpdateProfilePage />} />
         </Route>
         <Route element={<PrivateRoute />}>
           <Route path={ABOUT} element={<AboutPage />} />

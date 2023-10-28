@@ -4,6 +4,7 @@ import Button from "../../components/Button";
 import ENDPOINTS from "../../utils/endpoints";
 
 import { useForgotPasswordController } from "./controller";
+import FormWrapper from "../../wrappers/formWrapper";
 
 function ForgotPassword() {
   const {
@@ -14,7 +15,7 @@ function ForgotPassword() {
     loading,
   } = useForgotPasswordController();
   return (
-    <div className="p-3 max-w-lg mx-auto">
+    <FormWrapper>
       <h1 className="text-3xl text-center font-semibold my-7">
         Forgot Password
       </h1>
@@ -41,7 +42,7 @@ function ForgotPassword() {
           Sign In
         </Link>
       </div>
-    </div>
+    </FormWrapper>
   );
 }
 

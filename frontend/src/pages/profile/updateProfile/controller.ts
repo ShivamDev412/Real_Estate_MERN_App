@@ -2,26 +2,23 @@ import { useEffect, useRef, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
-import { RootState } from "../../redux/reducers";
+import { RootState } from "../../../redux/reducers";
 import {
   getDownloadURL,
   getStorage,
   ref,
   uploadBytesResumable,
 } from "firebase/storage";
-import { app } from "../../utils/firebaseAuth";
-import Toast from "../../utils/toastMessage";
+import { app } from "../../../utils/firebaseAuth";
+import Toast from "../../../utils/toastMessage";
 import {
   updateUserStart,
   updateUserSuccess,
   updateUserFailure,
-  deleteUserStart,
-  deleteUserSuccess,
-  deleteUserFailure,
-} from "../../redux/slice/user/userSlice";
-import { postApiCall, deleteApiCall } from "../../utils/apiCalls";
-import ENDPOINTS from "../../utils/endpoints";
-import { validateProfile } from "../../utils/validations";
+} from "../../../redux/slice/user/userSlice";
+import { postApiCall } from "../../../utils/apiCalls";
+import ENDPOINTS from "../../../utils/endpoints";
+import { validateProfile } from "../../../utils/validations";
 
 export const useProfileController = () => {
   const navigate = useNavigate();
@@ -49,7 +46,6 @@ export const useProfileController = () => {
       ? currentUser.data.user.phoneNo?.split(" ")[0]
       : "",
     email: currentUser.data.user.email ? currentUser.data.user.email : "",
-    password: "",
     avatar: currentUser.data.user.avatar ? currentUser.data.user.avatar : "",
   };
   const [profile, setProfile] = useState<any>(initialProfile);
@@ -125,7 +121,6 @@ export const useProfileController = () => {
             countryCode: res.data.user.phoneNo.split(" ")[0],
             firstName: res.data.user.firstName,
             lastName: res.data.user.lastName,
-            password: "",
             avatar: res.data.user.avatar,
           });
           Toast("Profile updated successfully", "success");
@@ -139,27 +134,6 @@ export const useProfileController = () => {
       }
     }
   };
-  const deleteAccount = async () => {
-    try {
-      dispatch(deleteUserStart());
-      const res = await deleteApiCall(
-        `/api/user/delete-user/${currentUser.data.user.id}`
-      );
-      if (res.success) {
-        Toast("Account deleted successfully", "success");
-        Cookies.remove("access-token", { path: "/" });
-        navigate(ENDPOINTS.SIGNIN);
-        dispatch(deleteUserSuccess());
-      } else {
-        Toast(res.message, "error");
-        dispatch(deleteUserFailure());
-      }
-    } catch (err: any) {
-      Toast(err.message, "error");
-      dispatch(deleteUserFailure());
-      return;
-    }
-  };
   const signOut = () => {
     Toast("Signed out successfully", "success");
     Cookies.remove("access-token", { path: "/" });
@@ -169,7 +143,6 @@ export const useProfileController = () => {
     setCountryCode(countryCode);
   };
   return {
-    deleteAccount,
     loading,
     fileUploadStatus,
     setFile,

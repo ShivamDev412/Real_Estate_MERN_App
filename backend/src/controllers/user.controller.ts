@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import Listing from "../database/models/listing.model";
 import bcrypt from "bcrypt";
 import { handleError } from "../utils/error";
-import User from "../database/models/user.model";
+import User, { UserDocument } from "../database/models/user.model";
 export const updateUserProfile = async (
   request: Request,
   response: Response,
@@ -165,6 +165,42 @@ export const showUserListings = async (
         pageNo,
         totalCount: totalListings,
       },
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+export const changePassword = async (
+  request: Request,
+  response: Response,
+  next: NextFunction
+) => {
+  const { oldPassword, newPassword } = request.body;
+  //@ts-ignore
+  const userId = request.user.id;
+  try {
+    const user: UserDocument | null = await User.findById(userId);
+    if (!user) {
+      return next({
+        status: 404,
+        message: "User not found",
+      });
+    }
+    const isPasswordValid = await bcrypt.compare(oldPassword, user.password);
+    if (!isPasswordValid) {
+      return next({
+        status: 400,
+        message: "Current password is incorrect",
+      });
+    }
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(newPassword, salt);
+    user.password = hashedPassword;
+    await user.save();
+
+    response.status(200).json({
+      success: true,
+      message: "Password changed successfully",
     });
   } catch (error) {
     next(error);

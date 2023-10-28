@@ -4,14 +4,13 @@ import { Link } from "react-router-dom";
 import { twMerge } from "tailwind-merge";
 import { useSelector } from "react-redux";
 import { CgProfile } from "react-icons/cg";
-import { FaSearch } from "react-icons/fa";
-import { BsFillKeyFill } from "react-icons/bs";
+import { FaSearch, FaListUl } from "react-icons/fa";
 import { AiOutlinePoweroff } from "react-icons/ai";
 import { FiSettings } from "react-icons/fi";
 import { RootState } from "../redux/reducers";
 import ENDPOINTS from "../utils/endpoints";
 import useAuth from "../utils/auth";
-import { useProfileController } from "../pages/profile/controller";
+import { useProfileController } from "../pages/profile/updateProfile/controller";
 
 const NavLinks = ({
   linkName,
@@ -72,11 +71,6 @@ function Header() {
             linkTo={ENDPOINTS.ABOUT}
             className={"hidden lg:inline"}
           />
-          <NavLinks
-            linkName="My Listings"
-            linkTo={ENDPOINTS.USER_LISTINGS}
-            className={"hidden lg:inline"}
-          />
           {auth ? (
             <>
               <div className="relative">
@@ -103,19 +97,20 @@ function Header() {
                       Hello, {currentUser?.data?.user?.firstName}!
                     </h3>
                     <Link
-                      to={ENDPOINTS.PROFILE}
+                      to={ENDPOINTS.USER_LISTINGS}
+                      className="hover:text-blue-700 mb-2 flex items-center gap-2"
+                      onClick={() => setUserDropDown(false)}
+                    >
+                      <FaListUl />
+                      My Listings
+                    </Link>
+                    <Link
+                      to={ENDPOINTS.UPDATE_PROFILE}
                       className="hover:text-blue-700 mb-2 flex items-center gap-2"
                       onClick={() => setUserDropDown(false)}
                     >
                       <CgProfile />
                       Update Profile
-                    </Link>
-                    <Link
-                      to={ENDPOINTS.PROFILE}
-                      className="hover:text-blue-700 mb-2 flex items-center gap-2"
-                      onClick={() => setUserDropDown(false)}
-                    >
-                      <BsFillKeyFill /> Change Password
                     </Link>
                     <Link
                       to={ENDPOINTS.SETTINGS}
@@ -169,11 +164,6 @@ function Header() {
           <NavLinks
             linkName="About"
             linkTo={ENDPOINTS.ABOUT}
-            className={"inline"}
-          />
-          <NavLinks
-            linkName="My Listings"
-            linkTo={ENDPOINTS.USER_LISTINGS}
             className={"inline"}
           />
         </div>

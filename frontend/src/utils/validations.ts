@@ -157,3 +157,23 @@ export const validateResetPassword = (
   }
   return errors;
 };
+export const validateChangePassword = (
+  oldPassword: string,
+  newPassword: string
+) => {
+  const errors: any = {};
+  if (oldPassword.trim() === "") {
+    errors.oldPassword = "Old password is required";
+  }
+  const passwordRegex =
+    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,20}$/;
+  if (!newPassword || newPassword.trim() === "") {
+    errors.newPassword = "New Password is required.";
+  } else if (!passwordRegex.test(newPassword)) {
+    errors.newPassword =
+      "Password must be 8-20 characters with at least one uppercase letter, one lowercase letter, one digit, and one special character.";
+  } else if (oldPassword === newPassword) {
+    errors.newPassword = "Old password and new password should not be same";
+  }
+  return errors;
+};

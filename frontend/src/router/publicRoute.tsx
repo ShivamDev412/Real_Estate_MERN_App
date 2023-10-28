@@ -1,7 +1,7 @@
 import ENDPOINTS from "../utils/endpoints";
 import { Outlet, Navigate } from "react-router-dom";
 import { Suspense } from "react";
-import MainWrapper from "./mainWrapper";
+import MainWrapper from "../wrappers/mainWrapper";
 import useAuth from "../utils/auth";
 function PublicRoute() {
   const auth = useAuth();

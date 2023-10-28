@@ -1,6 +1,7 @@
 const ENDPOINTS = {
   HOME: "/",
   PROFILE: "/profile",
+  UPDATE_PROFILE: "/update-profile",
   SIGNUP: "/signup",
   SIGNIN: "/signin",
   ABOUT: "/about",
