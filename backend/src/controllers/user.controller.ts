@@ -1,8 +1,10 @@
 import { NextFunction, Request, Response } from "express";
-import Listing from "../database/models/listing.model";
 import bcrypt from "bcrypt";
+import twilio from "twilio";
+import Listing from "../database/models/listing.model";
 import { handleError } from "../utils/error";
 import User, { UserDocument } from "../database/models/user.model";
+import { generateRandomFourDigitOTP, sendToMail } from "../utils/constant";
 export const updateUserProfile = async (
   request: Request,
   response: Response,
@@ -15,7 +17,18 @@ export const updateUserProfile = async (
     if (request.body.password) {
       request.body.password = bcrypt.hashSync(request.body.password, 10);
     }
-    const user = await User.findById(request.params.id);
+    const user: UserDocument | null = await User.findById(request.params.id);
+    //* *  If email or phoneNo changes then user has to verify them again
+    let emailVerified = user?.emailVerified;
+    let phoneNoVerified = user?.phoneNoVerified;
+    if (user) {
+      if (user.email !== request.body.email) {
+        emailVerified = false;
+      }
+      if (user.phoneNo !== request.body.phoneNo) {
+        phoneNoVerified = false;
+      }
+    }
     const updatedUser = await User.findByIdAndUpdate(
       request.params.id,
       {
@@ -30,6 +43,8 @@ export const updateUserProfile = async (
               : request.body.password,
           email: request.body.email,
           avatar: request.body.avatar,
+          emailVerified,
+          phoneNoVerified,
         },
       },
       { new: true }
@@ -49,6 +64,8 @@ export const updateUserProfile = async (
           firstName: rest.firstName,
           lastName: rest.lastName,
           phoneNo: rest.phoneNo,
+          emailVerified: rest.emailVerified,
+          phoneNoVerified: rest.phoneNoVerified,
           id: rest._id,
         },
       },
@@ -93,12 +110,11 @@ export const showUserListings = async (
   next: NextFunction
 ) => {
   try {
-    const userId = request.params.userId;
-
     // @ts-ignore
-    if (request.user.id !== userId) {
-      return next(handleError(401, "You can only view your own listings"));
-    }
+    const userId = request.user.id;
+    // if (request.user.id !== userId) {
+    //   return next(handleError(401, "You can only view your own listings"));
+    // }
 
     const filterObject: any = {
       userRef: userId,
@@ -202,6 +218,250 @@ export const changePassword = async (
       success: true,
       message: "Password changed successfully",
     });
+  } catch (error) {
+    next(error);
+  }
+};
+export const sendVerificationEmail = async (
+  request: Request,
+  response: Response,
+  next: NextFunction
+) => {
+  const { email } = request.body;
+
+  try {
+    const user: UserDocument | null = await User.findOne({ email });
+
+    if (!user) {
+      return next(handleError(404, "User with that email does not exist"));
+    } else if (user.emailVerified) {
+      response.status(400).json({
+        success: false,
+        message: "Email is already verified",
+      });
+    } else {
+      const verificationOTP = generateRandomFourDigitOTP();
+      user.emailVerificationOTP = verificationOTP;
+      user.emailVerificationOTPExpires = new Date(Date.now() + 15 * 60 * 1000);
+      await user.save();
+      const info = await sendToMail(
+        email,
+        "Email Verification",
+        `<p>Your verification OTP is: ${verificationOTP}</p>`
+      );
+      if (info) {
+        response.status(200).json({
+          success: true,
+          message: "Verification email has been sent to your email address",
+        });
+      }
+    }
+  } catch (error) {
+    next(error);
+  }
+};
+export const verifyEmailWithOTP = async (
+  request: Request,
+  response: Response,
+  next: NextFunction
+) => {
+  const { email, verificationOTP } = request.body;
+
+  try {
+    const user: UserDocument | null = await User.findOne({ email });
+
+    if (!user) {
+      return next(handleError(404, "User with that email does not exist"));
+    }
+
+    if (
+      user.emailVerificationOTP === verificationOTP &&
+      user.emailVerificationOTPExpires &&
+      user.emailVerificationOTPExpires > new Date()
+    ) {
+      user.emailVerified = true;
+      user.emailVerificationOTP = "";
+      user.emailVerificationOTPExpires = null;
+      await user.save();
+      response.status(200).json({
+        success: true,
+        message: "Email verified successfully",
+      });
+    } else {
+      response.status(400).json({
+        success: false,
+        message: "Invalid or expired verification OTP",
+      });
+    }
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const resendVerificationEmail = async (
+  request: Request,
+  response: Response,
+  next: NextFunction
+) => {
+  const { email } = request.body;
+
+  try {
+    const user: UserDocument | null = await User.findOne({ email });
+
+    if (!user) {
+      return next(handleError(404, "User with that email does not exist"));
+    }
+
+    if (user.emailVerified) {
+      return response.status(400).json({
+        success: false,
+        message: "Email is already verified",
+      });
+    }
+    const verificationOTP = generateRandomFourDigitOTP();
+    user.emailVerificationOTP = verificationOTP;
+    user.emailVerificationOTPExpires = new Date(Date.now() + 15 * 60 * 1000);
+
+    await user.save();
+    const info = await sendToMail(
+      email,
+      "Email Verification",
+      `<p>Your verification OTP is: ${verificationOTP}</p>`
+    );
+    if (info) {
+      response.status(200).json({
+        success: true,
+        message: "New verification email has been sent to your email address",
+      });
+    }
+  } catch (error) {
+    next(error);
+  }
+};
+export const sendVerificationToPhoneNumber = async (
+  request: Request,
+  response: Response,
+  next: NextFunction
+) => {
+  const { phoneNo } = request.body;
+  try {
+    const user = await User.findOne({ phoneNo });
+    if (!user) {
+      return next(
+        handleError(404, "User with that phone number does not exist")
+      );
+    }
+    const verificationOTP = generateRandomFourDigitOTP();
+    user.phoneNoVerificationOTP = verificationOTP;
+    user.phoneNoVerificationOTPExpires = new Date(Date.now() + 15 * 60 * 1000);
+    await user.save();
+    const client = twilio(
+      process.env.TWILIO_ACCOUNT_SID,
+      process.env.TWILIO_AUTH_TOKEN
+    );
+    const message = await client.messages.create({
+      body: `Your OTP for verification is ${verificationOTP}`,
+      from: process.env.TWILIO_ACCOUNT_PHONE_NUMBER,
+      to: phoneNo.replace(/\s/g, ""),
+    });
+    if (message.sid) {
+      response.status(200).json({
+        success: true,
+        message: "Verification OTP has been sent to your phone number",
+      });
+    } else {
+      response.status(400).json({
+        success: false,
+        message: "Failed to send verification OTP",
+      });
+    }
+  } catch (error) {
+    next(error);
+  }
+};
+export const verifyPhoneNumberWithOTP = async (
+  request: Request,
+  response: Response,
+  next: NextFunction
+) => {
+  const { phoneNo, verificationOTP } = request.body;
+  try {
+    const user: UserDocument | null = await User.findOne({ phoneNo });
+    if (!user) {
+      return next(
+        handleError(404, "User with that phone number does not exist")
+      );
+    }
+    if (
+      user.phoneNoVerificationOTP === verificationOTP &&
+      user.phoneNoVerificationOTPExpires &&
+      user.phoneNoVerificationOTPExpires > new Date()
+    ) {
+      user.phoneNoVerified = true;
+      user.phoneNoVerificationOTP = "";
+      user.phoneNoVerificationOTPExpires = null;
+      await user.save();
+      response.status(200).json({
+        success: true,
+        message: "Phone number verified successfully",
+      });
+    } else {
+      response.status(404).json({
+        success: false,
+        message: "Invalid or expired verification OTP",
+      });
+    }
+  } catch (error) {
+    next(error);
+  }
+};
+export const resendVerificationToPhoneNumber = async (
+  request: Request,
+  response: Response,
+  next: NextFunction
+) => {
+  const { phoneNo } = request.body;
+
+  try {
+    const user: UserDocument | null = await User.findOne({ phoneNo });
+
+    if (!user) {
+      return next(
+        handleError(404, "User with that phone number does not exist")
+      );
+    }
+    if (user.phoneNoVerified) {
+      return response.status(400).json({
+        success: false,
+        message: "Phone Number is already verified",
+      });
+    }
+    const verificationOTP = generateRandomFourDigitOTP();
+    user.phoneNoVerificationOTP = verificationOTP;
+    user.phoneNoVerificationOTPExpires = new Date(Date.now() + 15 * 60 * 1000);
+
+    await user.save();
+
+    const client = twilio(
+      process.env.TWILIO_ACCOUNT_SID,
+      process.env.TWILIO_AUTH_TOKEN
+    );
+    const message = await client.messages.create({
+      body: `Your OTP for verification is ${verificationOTP}`,
+      from: process.env.TWILIO_ACCOUNT_PHONE_NUMBER,
+      to: phoneNo.replace(/\s/g, ""),
+    });
+    if (message.sid) {
+      response.status(200).json({
+        success: true,
+        message: "Verification OTP has been sent to your phone number",
+      });
+    } else {
+      response.status(400).json({
+        success: false,
+        message: "Failed to send verification OTP",
+      });
+    }
   } catch (error) {
     next(error);
   }

@@ -21,6 +21,7 @@ const ForgotPasswordPage = React.lazy(() => import("../pages/forgotPassword"));
 const ResetPasswordPage = React.lazy(
   () => import("../pages/forgotPassword/resetPassword")
 );
+const VerifyUser = React.lazy(() => import("../pages/verifydetails"));
 function Router() {
   const {
     HOME,
@@ -37,10 +38,13 @@ function Router() {
     FORGOT_PASSWORD,
     RESET_PASSWORD,
     UPDATE_PROFILE,
+    VERIFY_EMAIL,
+    VERIFY_PHONE_NUMBER,
   } = ENDPOINTS;
   return (
     <BrowserRouter>
       <Routes>
+        {/* Public Routes */}
         <Route element={<PublicRoute />}>
           <Route path={FORGOT_PASSWORD} element={<ForgotPasswordPage />} />
         </Route>
@@ -53,6 +57,8 @@ function Router() {
         <Route element={<PublicRoute />}>
           <Route path={SIGNUP} element={<SignUpPage />} />
         </Route>
+
+        {/* Private Routes */}
         <Route element={<PrivateRoute />}>
           <Route path={PROFILE} element={<ProfilePage />} />
         </Route>
@@ -76,6 +82,12 @@ function Router() {
         </Route>
         <Route element={<PrivateRoute />}>
           <Route path={SETTINGS} element={<SettingsPage />} />
+        </Route>
+        <Route element={<PrivateRoute />}>
+          <Route path={VERIFY_EMAIL} element={<VerifyUser />} />
+        </Route>
+        <Route element={<PrivateRoute />}>
+          <Route path={VERIFY_PHONE_NUMBER} element={<VerifyUser />} />
         </Route>
         <Route element={<PrivateRoute />}>
           <Route path={CHANGE_PASSWORD} element={<ChangePasswordPage />} />

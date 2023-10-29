@@ -7,6 +7,7 @@ interface Props {
   label?: string;
   min?: number;
   max?: number;
+  disabled?: boolean;
 
   onChange: (event: ChangeEvent<HTMLInputElement>) => void;
 }
@@ -24,7 +25,13 @@ interface ToggleSwitchProps {
   checked: boolean;
   onChange: (event: ChangeEvent<HTMLInputElement>) => void;
 }
-const Input: React.FC<Props> = ({ id, onChange, value, type = "string" }) => {
+const Input: React.FC<Props> = ({
+  id,
+  onChange,
+  value,
+  type = "string",
+  disabled = false,
+}) => {
   return (
     <input
       type={type}
@@ -32,6 +39,7 @@ const Input: React.FC<Props> = ({ id, onChange, value, type = "string" }) => {
       id={id}
       name={id}
       value={value}
+      disabled={disabled}
       className="border p-3 rounded-lg placeholder:capitalize w-full"
       onChange={onChange}
     />
@@ -44,7 +52,6 @@ export const PhoneNoInput: React.FC<CountryCodeProps> = ({
   countryCodeValue,
   code = "",
 }) => {
-  console.log(value)
   const [countryCode, setCountryCode] = useState(code !== "" ? code : "+1");
   const handleCountryCodeChange = (e: ChangeEvent<HTMLSelectElement>) => {
     setCountryCode(e.target.value);

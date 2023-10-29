@@ -177,3 +177,13 @@ export const validateChangePassword = (
   }
   return errors;
 };
+export const validateVerifyUserError = (value: string, type: string) => {
+  const errors: any = {};
+  if (type === "Email") {
+    validateEmail(value, errors);
+    return errors.email ? errors.email : "";
+  } else {
+    validatePhoneNo(value, errors);
+    return errors.phoneNo ? errors.phoneNo : "";
+  }
+};

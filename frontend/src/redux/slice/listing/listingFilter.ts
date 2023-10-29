@@ -17,7 +17,7 @@ export interface InitialStateProps {
 }
 const initialState: InitialStateProps = {
   listingFilter: listingFilterInitialState,
-  queryString: "",
+  queryString: "/api/user/listings?pageNo=1",
 };
 
 const listingFilterSlice = createSlice({

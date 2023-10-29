@@ -8,6 +8,12 @@ interface User extends Document {
   firstName: string;
   lastName: string;
   phoneNo: string;
+  emailVerified: boolean;
+  emailVerificationOTP:string;
+  emailVerificationOTPExpires: Date | null;
+  phoneNoVerified: boolean;
+  phoneNoVerificationOTP:string;
+  phoneNoVerificationOTPExpires: Date | null;
   resetPasswordToken: string | null;
   resetPasswordExpires: Date | null;
 }
@@ -44,6 +50,18 @@ const UserSchema = new mongoose.Schema(
       required: [true, "Password is required"],
       minlength: [8, "Password should be at least 8 characters long"],
     },
+    emailVerified: {
+      type: Boolean,
+      default: false,
+    },
+    emailVerificationOTP: String,
+    emailVerificationOTPExpires: Date,
+    phoneNoVerified: {
+      type: Boolean,
+      default: false,
+    },
+    phoneNoVerificationOTP: String,
+    phoneNoVerificationOTPExpires: Date,
     avatar: {
       type: String,
       default:

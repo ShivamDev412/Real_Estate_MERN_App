@@ -1,12 +1,12 @@
 import React, { ReactNode } from "react";
-import ReactModal from "react-modal";
+import Modal from "react-modal";
 
 interface ModalProps {
   children: ReactNode;
   modalIsOpen: boolean;
   closeModal: () => void;
 }
-const Modal: React.FC<ModalProps> = ({ children, closeModal, modalIsOpen }) => {
+const ModalComponent: React.FC<ModalProps> = ({ children, closeModal, modalIsOpen }) => {
   const customStyles = {
     overlay: {
       backgroundColor: "rgba(0, 0, 0, 0.8)",
@@ -22,15 +22,15 @@ const Modal: React.FC<ModalProps> = ({ children, closeModal, modalIsOpen }) => {
     },
   };
   return (
-    <ReactModal
+    <Modal
       isOpen={modalIsOpen}
       onRequestClose={closeModal}
       style={customStyles}
       contentLabel="Delete Account Confirmation Modal"
     >
       {children}
-    </ReactModal>
+    </Modal>
   );
 };
-
-export default Modal;
+Modal.setAppElement('#root'); 
+export default ModalComponent;

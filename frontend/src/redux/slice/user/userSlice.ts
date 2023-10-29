@@ -10,6 +10,8 @@ type CurrentUserType = {
       username: string;
       firstName: string;
       lastName: string;
+      emailVerified:boolean,
+      phoneNoVerified:boolean
     };
   };
 };
@@ -29,6 +31,8 @@ const initialState: InitialStateProps = {
         username: "",
         firstName: "",
         lastName: "",
+        emailVerified:false,
+        phoneNoVerified:false
       },
     },
   },

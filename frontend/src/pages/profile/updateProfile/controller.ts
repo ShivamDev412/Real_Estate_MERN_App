@@ -19,6 +19,16 @@ import {
 import { postApiCall } from "../../../utils/apiCalls";
 import ENDPOINTS from "../../../utils/endpoints";
 import { validateProfile } from "../../../utils/validations";
+import {
+  setListingFilter,
+  setQueryString,
+} from "../../../redux/slice/listing/listingFilter";
+import { listingFilterInitialState } from "../../../utils/constant";
+import {
+  setListings,
+  setPageNo,
+  setTotalCount,
+} from "../../../redux/slice/listing/listingSlice";
 
 export const useProfileController = () => {
   const navigate = useNavigate();
@@ -26,8 +36,11 @@ export const useProfileController = () => {
     (state: RootState) => state.user
   );
   const [countryCode, setCountryCode] = useState(
-    currentUser.data.user.phoneNo?.split(" ")[0]
+    currentUser.data.user.phoneNo?.split(" ")[0] !== ""
+      ? currentUser.data.user.phoneNo?.split(" ")[0]
+      : "+1"
   );
+  const [apiLoading, setApiLoading] = useState(false);
   const dispatch = useDispatch();
   const initialProfile = {
     firstName: currentUser.data.user.firstName
@@ -58,6 +71,7 @@ export const useProfileController = () => {
   });
   const fileRef = useRef<HTMLInputElement>(null);
   const [file, setFile] = useState<any>(undefined);
+  const [anyChanges, setAnyChanges] = useState(false);
   const [fileUploadStatus, setFileUploadStatus] = useState<number>(0);
   const handleFileUpload = () => {
     if (file.size > 5000000) {
@@ -89,6 +103,11 @@ export const useProfileController = () => {
     );
   };
   useEffect(() => file && handleFileUpload(), [file]);
+  useEffect(() => {
+    const profileString = JSON.stringify(profile);
+    const initialProfileString = JSON.stringify(initialProfile);
+    setAnyChanges(!(profileString !== initialProfileString));
+  }, [profile, initialProfile]);
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setProfile({ ...profile, [e.target.id]: e.target.value });
   };
@@ -105,6 +124,7 @@ export const useProfileController = () => {
     if (Object.keys(validateProfileErrors).length === 0) {
       dispatch(updateUserStart());
       try {
+        setApiLoading(true);
         const res = await postApiCall(
           `/api/user/update-user/${currentUser.data.user.id}`,
           {
@@ -124,18 +144,28 @@ export const useProfileController = () => {
             avatar: res.data.user.avatar,
           });
           Toast("Profile updated successfully", "success");
+          setApiLoading(false);
         } else {
           Toast(res.message, "error");
           dispatch(updateUserFailure());
+          setApiLoading(false);
         }
       } catch (err: any) {
         Toast(err.message, "error");
         dispatch(updateUserFailure());
+        setApiLoading(false);
       }
     }
   };
+
   const signOut = () => {
     Toast("Signed out successfully", "success");
+    dispatch(setListingFilter(listingFilterInitialState));
+    dispatch(setQueryString("/api/user/listings?pageNo=1"));
+    dispatch(setListings([]));
+    dispatch(setPageNo(1));
+    dispatch(setTotalCount(0));
+
     Cookies.remove("access-token", { path: "/" });
     navigate(ENDPOINTS.SIGNIN);
   };
@@ -154,5 +184,7 @@ export const useProfileController = () => {
     signOut,
     profileError,
     countryCodeValue,
+    anyChanges,
+    apiLoading
   };
 };

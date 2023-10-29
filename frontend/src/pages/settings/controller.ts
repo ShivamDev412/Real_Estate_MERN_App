@@ -41,11 +41,10 @@ export const useSettingsController = () => {
       return;
     }
   };
-  const changePassword = () => navigate(ENDPOINTS.CHANGE_PASSWORD);
   return {
     deleteAccount,
-    changePassword,
     setOpenModal,
     openModal,
+    currentUser,
   };
 };

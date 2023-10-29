@@ -13,5 +13,7 @@ const ENDPOINTS = {
   LISTING: "listing/:id",
   USER_LISTINGS: "/listings",
   EDIT_LISTING: "/edit-listing/:id",
+  VERIFY_EMAIL: "/verify-email",
+  VERIFY_PHONE_NUMBER: "/verify-phone-number",
 };
 export default ENDPOINTS;

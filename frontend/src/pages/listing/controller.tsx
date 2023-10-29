@@ -23,14 +23,13 @@ export const useListingController = () => {
   const [showFilter, setShowFilter] = useState(false);
   const [activeFilterCount, setActiveFilterCount] = useState(0);
   const [dataLength, setDataLength] = useState(0);
-  const { currentUser } = useSelector((state: RootState) => state.user);
+  // const { currentUser } = useSelector((state: RootState) => state.user);
   const { listings, pageNo, totalCount } = useSelector(
     (state: RootState) => state.listings
   );
   const { listingFilter, queryString } = useSelector(
     (state: RootState) => state.listingFilter
   );
-
   useEffect(() => {
     getApiCall(queryString).then((res) => {
       if (res.success) {
@@ -67,7 +66,7 @@ export const useListingController = () => {
     setShowFilter(false);
     dispatch(
       setQueryString(
-        `/api/user/listings/${currentUser.data.user.id}?${
+        `/api/user/listings?${
           filterQuery !== ""
             ? `${filterQuery}&pageNo=${pageNo}`
             : `pageNo=${pageNo}`

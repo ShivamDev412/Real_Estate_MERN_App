@@ -14,10 +14,14 @@ function Profile() {
     fileUploadStatus,
     profileError,
     countryCodeValue,
+    anyChanges,
+    apiLoading,
   } = useProfileController();
   return (
     <FormWrapper>
-      <h1 className="text-3xl font-semibold text-center my-7">Update Profile</h1>
+      <h1 className="text-3xl font-semibold text-center my-7">
+        Update Profile
+      </h1>
       <form
         className="flex flex-col w-full gap-4 my-4"
         onSubmit={updateProfile}
@@ -103,7 +107,7 @@ function Profile() {
           value="Update Profile"
           type="submit"
           className="bg-slate-700"
-          disabled={loading}
+          disabled={anyChanges || loading || apiLoading}
         />
       </form>
     </FormWrapper>
