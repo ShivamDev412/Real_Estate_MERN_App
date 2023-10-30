@@ -9,7 +9,7 @@ const SignInPage = React.lazy(() => import("../pages/signIn"));
 const UpdateProfilePage = React.lazy(
   () => import("../pages/profile/updateProfile")
 );
-const ProfilePage = React.lazy(() => import("../pages/profile"));
+// const ProfilePage = React.lazy(() => import("../pages/profile"));
 const AboutPage = React.lazy(() => import("../pages/About"));
 const CreateListing = React.lazy(() => import("../pages/createListing"));
 const EditListing = React.lazy(() => import("../pages/createListing"));
@@ -25,7 +25,7 @@ const VerifyUser = React.lazy(() => import("../pages/verifydetails"));
 function Router() {
   const {
     HOME,
-    PROFILE,
+    // PROFILE,
     SIGNUP,
     SIGNIN,
     ABOUT,
@@ -59,9 +59,9 @@ function Router() {
         </Route>
 
         {/* Private Routes */}
-        <Route element={<PrivateRoute />}>
+        {/* <Route element={<PrivateRoute />}>
           <Route path={PROFILE} element={<ProfilePage />} />
-        </Route>
+        </Route> */}
         <Route element={<PrivateRoute />}>
           <Route path={UPDATE_PROFILE} element={<UpdateProfilePage />} />
         </Route>

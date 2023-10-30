@@ -41,10 +41,20 @@ export const useSettingsController = () => {
       return;
     }
   };
+  const verifyData = (type: string) => {
+    if (type === "email") navigate(ENDPOINTS.VERIFY_EMAIL);
+    else navigate(ENDPOINTS.VERIFY_PHONE_NUMBER);
+  };
+  const changePassword = () => {
+    navigate(ENDPOINTS.CHANGE_PASSWORD);
+  
+  }
   return {
     deleteAccount,
     setOpenModal,
     openModal,
     currentUser,
+    verifyData,
+    changePassword
   };
 };

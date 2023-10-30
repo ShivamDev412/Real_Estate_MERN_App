@@ -134,6 +134,7 @@ export const useProfileController = () => {
         );
         if (res.success) {
           dispatch(updateUserSuccess(res));
+          setAnyChanges(false);
           setProfile({
             username: res.data.user.username,
             email: res.data.user.email,

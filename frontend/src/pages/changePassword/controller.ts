@@ -1,9 +1,12 @@
 import { ChangeEvent, FormEvent, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { validateChangePassword } from "../../utils/validations";
 import Toast from "../../utils/toastMessage";
 import { putApiCall } from "../../utils/apiCalls";
+import ENDPOINTS from "../../utils/endpoints";
 
 export const useChangePasswordController = () => {
+  const navigation = useNavigate();
   const [changePassword, setChangePassword] = useState({
     oldPassword: "",
     newPassword: "",
@@ -44,6 +47,9 @@ export const useChangePasswordController = () => {
       }
     }
   };
+  const backToSettings = () => {
+    navigation(ENDPOINTS.SETTINGS);
+  };
 
   return {
     changePassword,
@@ -51,5 +57,6 @@ export const useChangePasswordController = () => {
     handleSubmit,
     handleInputChange,
     loading,
+    backToSettings,
   };
 };
