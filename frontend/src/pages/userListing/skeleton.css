@@ -1,0 +1,40 @@
+.userListingFilter {
+  display: flex;
+  justify-content: flex-end;
+}
+.userListingFilter span {
+  margin-left: 1rem;
+}
+.userListingContainer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3.5% !important;
+  margin: 1.5rem 0;
+}
+
+.userListingContainer span {
+  height: 200px;
+  margin-bottom: 30px;
+}
+
+@media (min-width: 640px) {
+  .userListingContainer {
+    gap: 6px;
+  }
+  .userListingContainer span {
+    width: 100%;
+  }
+}
+@media (min-width: 768px) {
+  .userListingContainer span {
+    width: 48%;
+  }
+}
+@media (min-width: 1024px) {
+  .userListingContainer span {
+    width: 31%;
+  }
+}
+.userListingContainer br {
+  display: none !important;
+}

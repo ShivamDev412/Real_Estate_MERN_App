@@ -23,10 +23,14 @@ const ENDPOINTS = {
   GET_LISTING: "/:listingId",
   DELETE_LISTING: "/delete/:listingId",
   UPDATE_LISTING: "/update-listing/:listingId",
+
+  // All Listings
+  ALL_LISTINGS: "/",
 };
 const APITYPE = {
   USER: "/api/user",
   AUTH: "/api/auth",
   LISTING: "/api/listing",
+  LISTINGS: "/api/listings"
 };
 export { ENDPOINTS, APITYPE };

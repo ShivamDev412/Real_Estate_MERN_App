@@ -1,7 +1,7 @@
 export const signUpInitialState = {
   firstName: "",
   lastName: "",
-  phoneNo:"",
+  phoneNo: "",
   username: "",
   email: "",
   password: "",
@@ -26,9 +26,9 @@ export interface ListingType {
   rent: boolean;
   furnished: boolean;
   parking: boolean;
-  gym: boolean;
-  swimmingPool: boolean;
-  wifi: boolean;
+  gym?: boolean;
+  swimmingPool?: boolean;
+  wifi?: boolean;
 }
 export const listingInitialState: ListingType = {
   name: "",

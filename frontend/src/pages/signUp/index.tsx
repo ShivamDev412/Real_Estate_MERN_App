@@ -21,28 +21,28 @@ function SignUp() {
     <FormWrapper>
       <h1 className="text-3xl text-center font-semibold my-7">Sign Up</h1>
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-        <div className="flex items-center w-full justify-between gap-2">
-          <div className="w-full">
+        <section className="flex items-center w-full justify-between gap-2">
+          <section className="w-full">
             <Input
               id="firstName"
               onChange={handleInputChange}
               value={newUser.firstName}
             />
             {formError.firstName && (
-              <div className="text-red-500">{formError.firstName}</div>
+              <p className="text-red-500">{formError.firstName}</p>
             )}
-          </div>
-          <div className="w-full">
+          </section>
+          <section className="w-full">
             <Input
               id="lastName"
               onChange={handleInputChange}
               value={newUser.lastName}
             />
             {formError.lastName && (
-              <div className="text-red-500">{formError.lastName}</div>
+              <p className="text-red-500">{formError.lastName}</p>
             )}
-          </div>
-        </div>
+          </section>
+        </section>
 
         <Input
           id="username"
@@ -50,7 +50,7 @@ function SignUp() {
           value={newUser.username}
         />
         {formError.username && (
-          <div className="text-red-500">{formError.username}</div>
+          <p className="text-red-500">{formError.username}</p>
         )}
         <Input
           id="email"
@@ -59,7 +59,7 @@ function SignUp() {
           value={newUser.email}
         />
         {formError.email && (
-          <div className="text-red-500">{formError.email}</div>
+          <p className="text-red-500">{formError.email}</p>
         )}
         <PhoneNoInput
           id="phoneNo"
@@ -68,7 +68,7 @@ function SignUp() {
           countryCodeValue={countryCodeValue}
         />
         {formError.phoneNo && (
-          <div className="text-red-500">{formError.phoneNo}</div>
+          <p className="text-red-500">{formError.phoneNo}</p>
         )}
         <Input
           id="password"
@@ -77,7 +77,7 @@ function SignUp() {
           value={newUser.password}
         />
         {formError.password && (
-          <div className="text-red-500">{formError.password}</div>
+          <p className="text-red-500">{formError.password}</p>
         )}
         <Button
           value="Sign Up"

@@ -3,18 +3,17 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import ENDPOINTS from "../utils/endpoints";
 import PrivateRoute from "./privateRoute";
 import PublicRoute from "./publicRoute";
-const HomePage = React.lazy(() => import("../pages/Home"));
+const HomePage = React.lazy(() => import("../pages/home"));
 const SignUpPage = React.lazy(() => import("../pages/signUp"));
 const SignInPage = React.lazy(() => import("../pages/signIn"));
 const UpdateProfilePage = React.lazy(
   () => import("../pages/profile/updateProfile")
 );
-// const ProfilePage = React.lazy(() => import("../pages/profile"));
 const AboutPage = React.lazy(() => import("../pages/About"));
 const CreateListing = React.lazy(() => import("../pages/createListing"));
 const EditListing = React.lazy(() => import("../pages/createListing"));
-const ListingPage = React.lazy(() => import("../pages/listing/listingDetail"));
-const ListingsPage = React.lazy(() => import("../pages/listing"));
+const ListingDetailPage = React.lazy(() => import("../pages/userListing/listingDetail"));
+const ListingPage = React.lazy(() => import("../pages/userListing"));
 const SettingsPage = React.lazy(() => import("../pages/settings"));
 const ChangePasswordPage = React.lazy(() => import("../pages/changePassword"));
 const ForgotPasswordPage = React.lazy(() => import("../pages/forgotPassword"));
@@ -22,15 +21,15 @@ const ResetPasswordPage = React.lazy(
   () => import("../pages/forgotPassword/resetPassword")
 );
 const VerifyUser = React.lazy(() => import("../pages/verifydetails"));
+const ListingsPage = React.lazy(() => import("../pages/home/listings"));
 function Router() {
   const {
     HOME,
-    // PROFILE,
     SIGNUP,
     SIGNIN,
     ABOUT,
     CREATE_LISTING,
-    LISTING,
+    LISTINGS,
     USER_LISTINGS,
     EDIT_LISTING,
     SETTINGS,
@@ -40,6 +39,7 @@ function Router() {
     UPDATE_PROFILE,
     VERIFY_EMAIL,
     VERIFY_PHONE_NUMBER,
+    USER_LISTING_DETAIL
   } = ENDPOINTS;
   return (
     <BrowserRouter>
@@ -75,10 +75,10 @@ function Router() {
           <Route path={EDIT_LISTING} element={<EditListing />} />
         </Route>
         <Route element={<PrivateRoute />}>
-          <Route path={LISTING} element={<ListingPage />} />
+          <Route path={USER_LISTING_DETAIL} element={<ListingDetailPage />} />
         </Route>
         <Route element={<PrivateRoute />}>
-          <Route path={USER_LISTINGS} element={<ListingsPage />} />
+          <Route path={USER_LISTINGS} element={<ListingPage />} />
         </Route>
         <Route element={<PrivateRoute />}>
           <Route path={SETTINGS} element={<SettingsPage />} />
@@ -91,6 +91,9 @@ function Router() {
         </Route>
         <Route element={<PrivateRoute />}>
           <Route path={CHANGE_PASSWORD} element={<ChangePasswordPage />} />
+        </Route>
+        <Route element={<PrivateRoute />}>
+          <Route path={LISTINGS} element={<ListingsPage />} />
         </Route>
         <Route element={<PrivateRoute />}>
           <Route path={HOME} element={<HomePage />} />

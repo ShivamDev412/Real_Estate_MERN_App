@@ -25,7 +25,7 @@ function SignIn() {
           value={user.email}
         />
         {formError.email && (
-          <div className="text-red-500">{formError.email}</div>
+          <p className="text-red-500">{formError.email}</p>
         )}
         <Input
           id={"password"}
@@ -34,7 +34,7 @@ function SignIn() {
           onChange={(e) => handleInputChange(e)}
         />
         {formError.password && (
-          <div className="text-red-500">{formError.password}</div>
+          <p className="text-red-500">{formError.password}</p>
         )}
         <Button
           value="Sign In"
@@ -43,7 +43,7 @@ function SignIn() {
           disabled={loading}
         />
       </form>
-      <div className="my-5">
+      <section className="my-5">
         <Button
           value={"Sign Up With Google"}
           type={"button"}
@@ -51,19 +51,19 @@ function SignIn() {
           disabled={loading}
           onClick={handleGoogleAuth}
         />
-      </div>
-      <div className="flex gap-2 mt-5">
+      </section>
+      <section className="flex gap-2 mt-5">
         <p>Don't have an account?</p>
         <Link to={ENDPOINTS.SIGNUP} className="text-blue-700">
           Sign Up
         </Link>
-      </div>
-      <div className="flex gap-2 mt-5">
+      </section>
+      <section className="flex gap-2 mt-5">
         <p>Can't remember your password?</p>
         <Link to={ENDPOINTS.FORGOT_PASSWORD} className="text-blue-700">
           Forgot Password
         </Link>
-      </div>
+      </section>
     </FormWrapper>
   );
 }

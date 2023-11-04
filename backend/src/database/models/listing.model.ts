@@ -17,6 +17,7 @@ interface Listing extends Document {
   wifi: boolean;
   imageUrl: Array<string>;
   userRef: string;
+  rent: boolean;
 }
 interface ListingDocument extends Listing {
   _doc: any;

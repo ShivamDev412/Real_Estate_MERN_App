@@ -22,11 +22,13 @@ interface InitialStateProps {
   listings: ListingType[];
   pageNo: number;
   totalCount: number;
+  loading:boolean;
 }
 const initialState: InitialStateProps = {
   listings: [],
   pageNo: 1,
-  totalCount:0
+  totalCount:0,
+  loading: false,
 };
 
 const listingSlice = createSlice({
@@ -42,7 +44,10 @@ const listingSlice = createSlice({
     setTotalCount: (state, action: PayloadAction<number>) => {
       state.totalCount = action.payload;
     },
+    setLoading:(state,action:PayloadAction<boolean>)=>{
+      state.loading = action.payload;
+    }
   },
 });
-export const { setListings, setPageNo, setTotalCount } = listingSlice.actions;
+export const { setListings, setPageNo, setTotalCount, setLoading } = listingSlice.actions;
 export default listingSlice.reducer;

@@ -8,6 +8,7 @@ import {
   setListings,
   setPageNo,
   setTotalCount,
+  setLoading,
 } from "../../redux/slice/listing/listingSlice";
 import {
   setListingFilter,
@@ -24,20 +25,30 @@ export const useListingController = () => {
   const [activeFilterCount, setActiveFilterCount] = useState(0);
   const [dataLength, setDataLength] = useState(0);
   // const { currentUser } = useSelector((state: RootState) => state.user);
-  const { listings, pageNo, totalCount } = useSelector(
+  const { listings, pageNo, totalCount, loading } = useSelector(
     (state: RootState) => state.listings
   );
   const { listingFilter, queryString } = useSelector(
     (state: RootState) => state.listingFilter
   );
   useEffect(() => {
-    getApiCall(queryString).then((res) => {
-      if (res.success) {
-        dispatch(setListings(res.data?.listings));
-        dispatch(setPageNo(res.data?.pageNo));
-        dispatch(setTotalCount(res.data?.totalCount));
-      }
-    });
+    dispatch(setLoading(true));
+    getApiCall(queryString)
+      .then((res) => {
+        if (res.success) {
+          dispatch(setListings(res.data?.listings));
+          dispatch(setPageNo(res.data?.pageNo));
+          dispatch(setTotalCount(res.data?.totalCount));
+          dispatch(setLoading(false));
+        } else {
+          Toast(res.message, "error");
+          dispatch(setLoading(false));
+        }
+      })
+      .catch((err) => {
+        Toast(err.message, "error");
+        dispatch(setLoading(false));
+      });
     setDataLength(listings.length);
   }, [dispatch, queryString]);
   const onPageChange = (page: number) => {
@@ -129,15 +140,16 @@ export const useListingController = () => {
   };
   const clearFilter = () => {
     dispatch(setListingFilter(listingFilterInitialState));
-    closeFilter()
+    closeFilter();
     setActiveFilterCount(0);
     applyFilter(pageNo, listingFilterInitialState);
   };
   const closeFilter = () => {
     setShowFilter(false);
-  }
+  };
   const goToCreateListing = () => navigation(ENDPOINTS.CREATE_LISTING);
   return {
+    loading,
     listings,
     deleteListing,
     listingDetail,

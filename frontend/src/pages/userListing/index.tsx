@@ -1,0 +1,92 @@
+import { BsFillHouseAddFill } from "react-icons/bs";
+import { useListingController } from "./controller";
+import Filter from "../../components/Filter";
+import Pagination from "../../components/Pagination";
+import Button from "../../components/Button";
+import ListingCard from "../../components/ListingCard";
+import UserListingsSkeleton from "./userListings.skeleton";
+
+function Listing() {
+  const {
+    listings,
+    listingDetail,
+    showFilter,
+    toggleFilter,
+    listingFilter,
+    handleToggleInputChange,
+    handlePriceFilter,
+    clearFilter,
+    applyFilter,
+    activeFilterCount,
+    totalCount,
+    onPageChange,
+    pageNo,
+    goToCreateListing,
+    closeFilter,
+    loading,
+  } = useListingController();
+  return (
+    <>
+      {!loading ? (
+        <div className="py-4 w-[90%] mx-auto my-4 sm:w-[80%]">
+          <div className="flex justify-between items-center flex-wrap">
+            <h2 className="text-3xl font-bold">My Listings</h2>
+            <div className="flex gap-2 my-3">
+              <Filter
+                showFilter={showFilter}
+                toggleFilter={toggleFilter}
+                listingFilter={listingFilter}
+                handleToggleInputChange={handleToggleInputChange}
+                handlePriceFilter={handlePriceFilter}
+                clearFilter={clearFilter}
+                applyFilter={() => applyFilter(pageNo)}
+                activeFilterCount={activeFilterCount}
+                closeFilter={closeFilter}
+              />
+              <Button
+                value={
+                  <>
+                    <BsFillHouseAddFill /> Create Listing
+                  </>
+                }
+                type="button"
+                className="bg-green-700 p-2 w-fit flex items-center gap-1 capitalize"
+                disabled={false}
+                onClick={goToCreateListing}
+              />
+            </div>
+          </div>
+
+          <div className="flex flex-wrap gap-6 lg:gap-[3.5%] my-6">
+            {listings?.length ? (
+              listings.map((listing) => (
+                <ListingCard
+                  key={listing._id}
+                  listing={listing}
+                  listingDetail={listingDetail}
+                />
+              ))
+            ) : (
+              <div>No listings available</div>
+            )}
+          </div>
+          {totalCount > 9 ? (
+            <div className="flex justify-end mt-[50px]">
+              <Pagination
+                pageNo={pageNo}
+                totalPageCount={Math.ceil(totalCount / 9)}
+                onPageChange={onPageChange}
+              />
+            </div>
+          ) : (
+            <></>
+          )}
+        </div>
+      ) : (
+        <UserListingsSkeleton />
+      )}
+    </>
+  );
+}
+
+export default Listing;
