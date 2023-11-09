@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { getApiCall } from "../../utils/apiCalls";
 import { RootState } from "../../redux/reducers";
 import {
@@ -8,13 +9,15 @@ import {
   setListingsOnRent,
 } from "../../redux/slice/listings/listingsSlice";
 import Toast from "../../utils/toastMessage";
+import { API_TYPE } from "../../utils/endpoints";
 export const useHomeController = () => {
   const dispatch = useDispatch();
+  const navigation = useNavigate();
   const { recentAddedListings, listingsOnSales, listingsOnRent } = useSelector(
     (state: RootState) => state.allListings
   );
   useEffect(() => {
-    getApiCall("/api/listings")
+    getApiCall(API_TYPE.LISTINGS)
       .then((response) => {
         if (response.success) {
           const { listingsOnRent, listingsOnSales, recentAddedListings } =
@@ -31,9 +34,13 @@ export const useHomeController = () => {
         console.log(error.message);
       });
   }, [dispatch]);
+  const listingDetail = (id: string) => {
+    navigation(`/listing-detail/${id}`);
+  };
   return {
     recentAddedListings,
     listingsOnSales,
     listingsOnRent,
+    listingDetail,
   };
 };

@@ -17,7 +17,7 @@ import {
   updateUserFailure,
 } from "../../../redux/slice/user/userSlice";
 import { postApiCall } from "../../../utils/apiCalls";
-import ENDPOINTS from "../../../utils/endpoints";
+import ENDPOINTS, { API_TYPE } from "../../../utils/endpoints";
 import { validateProfile } from "../../../utils/validations";
 import {
   setListingFilter,
@@ -126,7 +126,7 @@ export const useProfileController = () => {
       try {
         setApiLoading(true);
         const res = await postApiCall(
-          `/api/user/update-user/${currentUser.data.user.id}`,
+          `${API_TYPE.USER}/update-user/${currentUser.data.user.id}`,
           {
             ...profile,
             phoneNo: `${countryCode} ${profile.phoneNo}`,

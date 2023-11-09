@@ -3,7 +3,7 @@ import { useSelector } from "react-redux/es/hooks/useSelector";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { RootState } from "../../redux/reducers";
-import { getApiCall, deleteApiCall } from "../../utils/apiCalls";
+import { getApiCall } from "../../utils/apiCalls";
 import {
   setListings,
   setPageNo,
@@ -17,7 +17,7 @@ import {
 import Toast from "../../utils/toastMessage";
 import { ListingFilter } from "../../redux/slice/listing/listingFilter";
 import { listingFilterInitialState } from "../../utils/constant";
-import ENDPOINTS from "../../utils/endpoints";
+import ENDPOINTS, { API_TYPE } from "../../utils/endpoints";
 export const useListingController = () => {
   const dispatch = useDispatch();
   const navigation = useNavigate();
@@ -28,6 +28,7 @@ export const useListingController = () => {
   const { listings, pageNo, totalCount, loading } = useSelector(
     (state: RootState) => state.listings
   );
+  const { currentUser } = useSelector((state: RootState) => state.user);
   const { listingFilter, queryString } = useSelector(
     (state: RootState) => state.listingFilter
   );
@@ -77,7 +78,7 @@ export const useListingController = () => {
     setShowFilter(false);
     dispatch(
       setQueryString(
-        `/api/user/listings?${
+        `${API_TYPE.USER}/listings?${
           filterQuery !== ""
             ? `${filterQuery}&pageNo=${pageNo}`
             : `pageNo=${pageNo}`
@@ -86,37 +87,16 @@ export const useListingController = () => {
     );
   };
 
-  const deleteListing = async (
-    e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
-    id: string
-  ) => {
-    e.preventDefault();
-    e.stopPropagation();
-    try {
-      const res = await deleteApiCall(`/api/listing/delete/${id}`);
-      if (res.success) {
-        dispatch(setListings(listings.filter((listing) => listing._id !== id)));
-        Toast(res.message, "success");
-      }
-    } catch (error: any) {
-      Toast(error.message, "error");
-    }
-  };
+
   const listingDetail = (
     e: React.MouseEvent<HTMLDivElement, MouseEvent>,
     id: string
   ) => {
     e.preventDefault();
     e.stopPropagation();
-    navigation(`/listing/${id}`);
+    navigation(`/user-listing/${id}`);
   };
-  const editListing = (
-    e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
-    id: string
-  ) => {
-    e.stopPropagation();
-    navigation(`/edit-listing/${id}`);
-  };
+
   const toggleFilter = () => {
     setShowFilter(!showFilter);
   };
@@ -147,13 +127,22 @@ export const useListingController = () => {
   const closeFilter = () => {
     setShowFilter(false);
   };
-  const goToCreateListing = () => navigation(ENDPOINTS.CREATE_LISTING);
+  const goToCreateListing = () => {
+    if (
+      currentUser.data.user.emailVerified &&
+      currentUser.data.user.phoneNoVerified
+    ) {
+      navigation(ENDPOINTS.CREATE_LISTING);
+    } else
+      Toast(
+        "Verify your email and phone number to create a new listing",
+        "info"
+      );
+  };
   return {
     loading,
     listings,
-    deleteListing,
     listingDetail,
-    editListing,
     showFilter,
     toggleFilter,
     listingFilter,

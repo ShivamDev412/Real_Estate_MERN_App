@@ -4,6 +4,7 @@ import { validateForgotPassword } from "../../utils/validations";
 
 import { postApiCall } from "../../utils/apiCalls";
 import Toast from "../../utils/toastMessage";
+import { API_TYPE } from "../../utils/endpoints";
 export const useForgotPasswordController = () => {
   //   const navigate = useNavigate();
   const [forgotPassword, setForgotPassword] = useState({
@@ -26,7 +27,7 @@ export const useForgotPasswordController = () => {
       try {
         setLoading(true);
         const res = await postApiCall(
-          "/api/auth/forgot-password",
+          `${API_TYPE.AUTH}/forgot-password`,
           forgotPassword
         );
         if (res.success) {

@@ -4,10 +4,10 @@ import { twMerge } from "tailwind-merge";
 type ButtonType = "button" | "submit" ;
 
 interface Props {
-  value: string | any;
+  value: any;
   type?: ButtonType;
   className?: string;
-  disabled: boolean;
+  disabled?: boolean;
   onClick?: () => void;
 }
 
@@ -15,7 +15,7 @@ const Button: React.FC<Props> = ({
   value,
   type = "button",
   className = "",
-  disabled,
+  disabled = false,
   onClick,
 }) => {
   const buttonClasses = twMerge(

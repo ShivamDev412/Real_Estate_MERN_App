@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { validateResetPassword } from "../../../utils/validations";
 import { postApiCall } from "../../../utils/apiCalls";
 import Toast from "../../../utils/toastMessage";
+import { API_TYPE } from "../../../utils/endpoints";
 export const useResetPasswordController = () => {
   const { pathname } = useLocation();
   const navigation = useNavigate();
@@ -30,7 +31,7 @@ export const useResetPasswordController = () => {
       try {
         setLoading(true);
         const res = await postApiCall(
-          `/api/auth/reset-password/${resetToken}`,
+          `${API_TYPE.AUTH}/reset-password/${resetToken}`,
           resetPassword
         );
         if (res.success) {

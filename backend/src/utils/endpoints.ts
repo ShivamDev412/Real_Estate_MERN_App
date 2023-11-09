@@ -30,7 +30,7 @@ const ENDPOINTS = {
 const APITYPE = {
   USER: "/api/user",
   AUTH: "/api/auth",
-  LISTING: "/api/listing",
+  USER_LISTING: "/api/user-listings",
   LISTINGS: "/api/listings"
 };
 export { ENDPOINTS, APITYPE };

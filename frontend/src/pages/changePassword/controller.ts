@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { validateChangePassword } from "../../utils/validations";
 import Toast from "../../utils/toastMessage";
 import { putApiCall } from "../../utils/apiCalls";
-import ENDPOINTS from "../../utils/endpoints";
+import ENDPOINTS, { API_TYPE } from "../../utils/endpoints";
 
 export const useChangePasswordController = () => {
   const navigation = useNavigate();
@@ -30,7 +30,7 @@ export const useChangePasswordController = () => {
       try {
         setLoading(true);
         const res = await putApiCall(
-          "/api/user/change-password",
+          `${API_TYPE.USER}/change-password`,
           changePassword
         );
         if (res.success) {

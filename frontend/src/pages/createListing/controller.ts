@@ -18,6 +18,7 @@ import Toast from "../../utils/toastMessage";
 import { getApiCall, postApiCall, putApiCall } from "../../utils/apiCalls";
 import { RootState } from "../../redux/reducers";
 import { setListing } from "../../redux/slice/listing/newListing";
+import { API_TYPE } from "../../utils/endpoints";
 
 export const useCreateListingController = () => {
   const { pathname } = useLocation();
@@ -32,9 +33,9 @@ export const useCreateListingController = () => {
   const navigate = useNavigate();
   const getListingData = async () => {
     try {
-      const res = await getApiCall(`/api/listing/${listingId}`);
+      const res = await getApiCall(`${API_TYPE.USER_LISTING}/${listingId}`);
       if (res.success) {
-        const { _id, __v, createdAt, updatedAt, ...listingData } = res.data;
+        const { __v, createdAt, updatedAt, ...listingData } = res.data;
         dispatch(setListing(listingData));
       }
     } catch (e: any) {
@@ -95,14 +96,14 @@ export const useCreateListingController = () => {
           userRef: listing.userRef ? listing.userRef : currentUser.data.user.id,
         };
         const url = !listingId
-          ? "/api/listing/create-listing"
-          : `/api/listing/update-listing/${listingId}`;
+          ? `${API_TYPE.USER_LISTING}/create-listing`
+          : `${API_TYPE.USER_LISTING}/update-listing/${listingId}`;
         const res = await (listingId
           ? putApiCall(url, listingToSend)
           : postApiCall(url, listingToSend));
         if (res.success) {
           Toast(res.message, "success");
-          navigate(`/listings`);
+          navigate(`/user-listing/${listingId}`);
           dispatch(setListing(listingInitialState));
           setFormError(listingInitialStateError);
         } else {

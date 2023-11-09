@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { listingFilterInitialState } from "../../../utils/constant";
+import { API_TYPE } from "../../../utils/endpoints";
 export interface ListingFilter {
   regularPrice: number | boolean;
   discountPrice: number | boolean;
@@ -17,7 +18,7 @@ export interface InitialStateProps {
 }
 const initialState: InitialStateProps = {
   listingFilter: listingFilterInitialState,
-  queryString: "/api/user/listings?pageNo=1",
+  queryString: `${API_TYPE.USER}/listings?pageNo=1`,
 };
 
 const listingFilterSlice = createSlice({

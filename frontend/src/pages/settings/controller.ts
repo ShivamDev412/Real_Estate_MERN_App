@@ -10,7 +10,7 @@ import {
 } from "../../redux/slice/user/userSlice";
 import { deleteApiCall } from "../../utils/apiCalls";
 import Toast from "../../utils/toastMessage";
-import ENDPOINTS from "../../utils/endpoints";
+import ENDPOINTS, { API_TYPE } from "../../utils/endpoints";
 
 export const useSettingsController = () => {
   const navigate = useNavigate();
@@ -21,7 +21,7 @@ export const useSettingsController = () => {
     try {
       dispatch(deleteUserStart());
       const res = await deleteApiCall(
-        `/api/user/delete-user/${currentUser.data.user.id}`
+        `${API_TYPE.USER}/delete-user/${currentUser.data.user.id}`
       );
       if (res.success) {
         setOpenModal(false);

@@ -29,6 +29,7 @@ export interface ListingType {
   gym?: boolean;
   swimmingPool?: boolean;
   wifi?: boolean;
+  _id?: string;
 }
 export const listingInitialState: ListingType = {
   name: "",

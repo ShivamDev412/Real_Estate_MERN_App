@@ -4,15 +4,21 @@ import ListingCard from "../../components/ListingCard";
 import NoData from "../../components/noData";
 import { useHomeController } from "./controller";
 import ENDPOINTS from "../../utils/endpoints";
+import { ListingType } from "../../utils/constant";
 interface ListingData {
-  data: any;
+  data: ListingType[];
   total: number;
 }
 interface SectionComponent {
   title: string;
   data: ListingData;
+  listingDetail: (id: string) => void;
 }
-const SectionComponent: React.FC<SectionComponent> = ({ title, data }) => {
+const SectionComponent: React.FC<SectionComponent> = ({
+  title,
+  data,
+  listingDetail,
+}) => {
   return (
     <section className="w-[90%] sm:w-[80%] mx-auto my-[4rem]">
       <h3 className="text-2xl font-bold text-zinc-900">{title}</h3>
@@ -24,7 +30,7 @@ const SectionComponent: React.FC<SectionComponent> = ({ title, data }) => {
                 <ListingCard
                   key={listing._id}
                   listing={listing}
-                  listingDetail={() => {}}
+                  listingDetail={() => listingDetail(listing._id)}
                 />
               );
             }
@@ -45,8 +51,12 @@ const SectionComponent: React.FC<SectionComponent> = ({ title, data }) => {
   );
 };
 function Home() {
-  const { recentAddedListings, listingsOnSales, listingsOnRent } =
-    useHomeController();
+  const {
+    recentAddedListings,
+    listingsOnSales,
+    listingsOnRent,
+    listingDetail,
+  } = useHomeController();
   return (
     <>
       <section className="relative w-full h-[20rem] xl:h-[30rem]">
@@ -71,9 +81,21 @@ function Home() {
         </div>
       </section>
 
-      <SectionComponent title="Recently Added" data={recentAddedListings} />
-      <SectionComponent title="On Sale" data={listingsOnSales} />
-      <SectionComponent title="Available For Rent" data={listingsOnRent} />
+      <SectionComponent
+        title="Recently Added"
+        data={recentAddedListings}
+        listingDetail={listingDetail}
+      />
+      <SectionComponent
+        title="On Sale"
+        data={listingsOnSales}
+        listingDetail={listingDetail}
+      />
+      <SectionComponent
+        title="Available For Rent"
+        data={listingsOnRent}
+        listingDetail={listingDetail}
+      />
     </>
   );
 }

@@ -6,7 +6,7 @@ import { RootState } from "../../redux/reducers";
 import { useSelector } from "react-redux";
 import Toast from "../../utils/toastMessage";
 import { postApiCall } from "../../utils/apiCalls";
-import ENDPOINTS from "../../utils/endpoints";
+import ENDPOINTS, { API_TYPE } from "../../utils/endpoints";
 import { signInSuccess } from "../../redux/slice/user/userSlice";
 export const useVerifyUser = () => {
   const { pathname } = useLocation();
@@ -47,7 +47,7 @@ export const useVerifyUser = () => {
       try {
         setSendOtpLoading(true);
         const res = await postApiCall(
-          `/api/user/send-otp_to_${
+          `${API_TYPE.USER}/send-otp_to_${
             pageTitle === "Email" ? "email" : "phone_number"
           }`,
           {
@@ -75,7 +75,7 @@ export const useVerifyUser = () => {
     if (otp.length > 0) {
       try {
         const res = await postApiCall(
-          `/api/user/verify-${
+          `${API_TYPE.USER}/verify-${
             pageTitle === "Email" ? "email" : "phone_number"
           }`,
           {
@@ -114,7 +114,7 @@ export const useVerifyUser = () => {
   const resendOtp = async () => {
     try {
       const res = await postApiCall(
-        `/api/user/send-otp_to_${
+        `${API_TYPE.USER}/send-otp_to_${
           pageTitle === "Email" ? "email" : "phone_number"
         }`,
         {

@@ -5,7 +5,7 @@ require("dotenv").config();
 import connectDB from "./database";
 import userRoutes from "./routes/user.route";
 import authRoutes from "./routes/auth.route";
-import listingRoutes from "./routes/listing.route";
+import userListingRoutes from "./routes/userListing.route";
 import listingsRoutes from "./routes/listings.route";
 import { APITYPE } from "./utils/endpoints";
 import { errorMiddleware } from "./middleware/errorMiddleware";
@@ -23,7 +23,7 @@ app.use(express.urlencoded({ extended: true }));
 //** Middleware custom functions */
 app.use(APITYPE.USER, userRoutes);
 app.use(APITYPE.AUTH, authRoutes);
-app.use(APITYPE.LISTING, listingRoutes);
+app.use(APITYPE.USER_LISTING, userListingRoutes);
 app.use(APITYPE.LISTINGS, listingsRoutes);
 app.use(errorMiddleware);
 

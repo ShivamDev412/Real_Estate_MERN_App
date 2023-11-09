@@ -1,6 +1,6 @@
 import { ChangeEvent, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import ENDPOINTS from "../../utils/endpoints";
+import ENDPOINTS, { API_TYPE } from "../../utils/endpoints";
 import Toast from "../../utils/toastMessage";
 import { signUpInitialState } from "../../utils/constant";
 import { validateForm } from "../../utils/validations";
@@ -35,7 +35,7 @@ export const useSignupController = () => {
       };
       try {
         setLoading(true);
-        const data = await postApiCall("/api/auth/signup", dataToSend);
+        const data = await postApiCall(`${API_TYPE.AUTH}/signup`, dataToSend);
         if (data.success) {
           Toast("Sign-up successful", "success");
           navigate(ENDPOINTS.SIGNIN);

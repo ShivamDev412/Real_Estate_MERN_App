@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Cookies from "js-cookie";
 import { GoogleAuthProvider, getAuth, signInWithPopup } from "firebase/auth";
-import ENDPOINTS from "../../utils/endpoints";
+import ENDPOINTS, { API_TYPE } from "../../utils/endpoints";
 import { postApiCall } from "../../utils/apiCalls";
 import Toast from "../../utils/toastMessage";
 import {
@@ -47,7 +47,7 @@ export const useSignInController = () => {
       try {
         dispatch(signInStart());
         // setLoading(true);
-        const res = await postApiCall("/api/auth/signin", user);
+        const res = await postApiCall(`${API_TYPE.AUTH}/signin`, user);
         if (res.success) {
           Toast("Sign-in successful", "success");
           dispatch(signInSuccess(res));
@@ -70,7 +70,7 @@ export const useSignInController = () => {
       const provider = new GoogleAuthProvider();
       const auth = getAuth(app);
       const result = await signInWithPopup(auth, provider);
-      const res = await postApiCall("/api/auth/google", {
+      const res = await postApiCall(`${API_TYPE.AUTH}/google`, {
         firstName: result.user.displayName?.split(" ")[0],
         lastName: result.user.displayName?.split(" ")[1] || "",
         email: result.user.email,
