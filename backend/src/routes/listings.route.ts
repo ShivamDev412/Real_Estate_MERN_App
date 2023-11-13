@@ -4,9 +4,7 @@ import {
   getAllListings,
   getListingById,
 } from "../controllers/listings.controller";
-import {
-  addReview,
-} from "../controllers/review.controller";
+import { addReview } from "../controllers/review.controller";
 import { verifyToken } from "../utils/verifyUser";
 const route = express.Router();
 

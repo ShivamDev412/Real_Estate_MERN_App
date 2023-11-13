@@ -10,9 +10,10 @@ import {
   resendVerificationEmail,
   sendVerificationToPhoneNumber,
   verifyPhoneNumberWithOTP,
-  resendVerificationToPhoneNumber
+  resendVerificationToPhoneNumber,
 } from "../controllers/user.controller";
 import { verifyToken } from "../utils/verifyUser";
+import { getNotifications } from "../controllers/user.notifications";
 const route = express.Router();
 
 route.post(ENDPOINTS.UPDATE_USER, verifyToken, updateUserProfile);
@@ -26,7 +27,20 @@ route.post(
   verifyToken,
   resendVerificationEmail
 );
-route.post(ENDPOINTS.SEND_OTP_TO_PHONE, verifyToken, sendVerificationToPhoneNumber);
-route.post(ENDPOINTS.VERIFY_PHONE_NUMBER, verifyToken, verifyPhoneNumberWithOTP);
-route.post(ENDPOINTS.RESEND_SEND_OTP_TO_PHONE, verifyToken, resendVerificationToPhoneNumber);
+route.post(
+  ENDPOINTS.SEND_OTP_TO_PHONE,
+  verifyToken,
+  sendVerificationToPhoneNumber
+);
+route.post(
+  ENDPOINTS.VERIFY_PHONE_NUMBER,
+  verifyToken,
+  verifyPhoneNumberWithOTP
+);
+route.post(
+  ENDPOINTS.RESEND_SEND_OTP_TO_PHONE,
+  verifyToken,
+  resendVerificationToPhoneNumber
+);
+route.get(ENDPOINTS.GET_NOTIFICATIONS, verifyToken, getNotifications);
 export default route;
