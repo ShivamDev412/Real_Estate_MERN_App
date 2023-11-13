@@ -1,17 +1,14 @@
-import { useState } from "react";
-
+import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { twMerge } from "tailwind-merge";
 import { useSelector } from "react-redux";
-import { CgProfile } from "react-icons/cg";
-import { FaSearch, FaListUl } from "react-icons/fa";
-import { AiOutlinePoweroff } from "react-icons/ai";
-import { FiSettings } from "react-icons/fi";
+import { FaSearch } from "react-icons/fa";
 import { RootState } from "../redux/reducers";
 import ENDPOINTS from "../utils/endpoints";
 import useAuth from "../utils/auth";
 import { useProfileController } from "../pages/profile/updateProfile/controller";
-
+import ProfileDropdown from "./ProfileDropdown";
+import NotificationDropdown from "./NotificationDropdown";
 const NavLinks = ({
   linkName,
   linkTo,
@@ -34,9 +31,10 @@ const NavLinks = ({
 };
 
 function Header() {
+  const navigation = useNavigate();
   const auth = useAuth();
   const { currentUser } = useSelector((state: RootState) => state.user);
-  const [userDropdown, setUserDropDown] = useState(false);
+
   const { signOut } = useProfileController();
   return (
     <header className="bg-zinc-900 shadow-md py-4">
@@ -71,65 +69,18 @@ function Header() {
             linkTo={ENDPOINTS.ABOUT}
             className={"hidden lg:inline"}
           />
+
           {auth ? (
             <>
-              <div className="relative">
-                <button
-                  className="h-10 w-10 flex justify-center"
-                  onClick={() => setUserDropDown(!userDropdown)}
-                >
-                  <img
-                    className="w-full h-full rounded-full"
-                    src={currentUser?.data?.user?.avatar}
-                    alt={currentUser?.data?.user?.username}
-                  />
-                </button>
-              </div>
-              {userDropdown ? (
-                <div
-                  className="z-[99999] absolute right-[2rem] sm:right-[4.5rem] md:right-[5rem] lg:right-[6rem] xl:right-[8rem] top-[4.5rem] mt-2 w-[180px] rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none"
-                  role="menu"
-                  aria-orientation="vertical"
-                  aria-labelledby="options-menu"
-                >
-                  <div className="p-2 flex flex-col">
-                    <h3 className="font-[500] text-xl mb-2 italic">
-                      Hello, {currentUser?.data?.user?.firstName}!
-                    </h3>
-                    <Link
-                      to={ENDPOINTS.USER_LISTINGS}
-                      className="hover:text-blue-700 mb-2 flex items-center gap-2"
-                      onClick={() => setUserDropDown(false)}
-                    >
-                      <FaListUl />
-                      My Listings
-                    </Link>
-                    <Link
-                      to={ENDPOINTS.UPDATE_PROFILE}
-                      className="hover:text-blue-700 mb-2 flex items-center gap-2"
-                      onClick={() => setUserDropDown(false)}
-                    >
-                      <CgProfile />
-                      Update Profile
-                    </Link>
-                    <Link
-                      to={ENDPOINTS.SETTINGS}
-                      className="hover:text-blue-700 mb-2 flex items-center gap-2"
-                      onClick={() => setUserDropDown(false)}
-                    >
-                      <FiSettings /> Settings
-                    </Link>
-                    <button
-                      className="text-red-700 mb-2 flex items-center gap-2"
-                      onClick={signOut}
-                    >
-                      <AiOutlinePoweroff /> Sign Out
-                    </button>
-                  </div>
-                </div>
-              ) : (
-                <></>
-              )}
+              <NotificationDropdown
+                navigation={navigation}
+                currentUser={currentUser}
+              />
+              <ProfileDropdown
+                navigation={navigation}
+                currentUser={currentUser}
+                signOut={signOut}
+              />
             </>
           ) : (
             <NavLinks
