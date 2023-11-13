@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { ReviewsType } from "../../../utils/constant";
 export type ListingType = {
   address: string;
   bathroom: number;
@@ -15,6 +16,10 @@ export type ListingType = {
   rent: boolean;
   sale: boolean;
   updatedAt: string;
+  gym: boolean;
+  wifi: boolean;
+  reviews: Array<ReviewsType>;
+  swimmingPool: boolean;
   userRef: string;
   _id: string;
 };
@@ -22,12 +27,12 @@ interface InitialStateProps {
   listings: ListingType[];
   pageNo: number;
   totalCount: number;
-  loading:boolean;
+  loading: boolean;
 }
 const initialState: InitialStateProps = {
   listings: [],
   pageNo: 1,
-  totalCount:0,
+  totalCount: 0,
   loading: false,
 };
 
@@ -44,10 +49,11 @@ const listingSlice = createSlice({
     setTotalCount: (state, action: PayloadAction<number>) => {
       state.totalCount = action.payload;
     },
-    setLoading:(state,action:PayloadAction<boolean>)=>{
+    setLoading: (state, action: PayloadAction<boolean>) => {
       state.loading = action.payload;
-    }
+    },
   },
 });
-export const { setListings, setPageNo, setTotalCount, setLoading } = listingSlice.actions;
+export const { setListings, setPageNo, setTotalCount, setLoading } =
+  listingSlice.actions;
 export default listingSlice.reducer;

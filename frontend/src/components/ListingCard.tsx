@@ -3,18 +3,16 @@ import Carousel from "./Carousel";
 import { FaLocationDot } from "react-icons/fa6";
 import React from "react";
 import { ListingType } from "../utils/constant";
-interface ListingDetails extends ListingType {
-  _id: string;
-}
+
 interface Listing {
-  listing: ListingDetails;
+  listing: ListingType;
   listingDetail: (e: React.MouseEvent<HTMLDivElement>, id: string) => void;
 }
 const ListingCard: React.FC<Listing> = ({ listingDetail, listing }) => {
   return (
     <div
       className="w-full md:w-[48%] lg:w-[31%] rounded-lg shadow-xl bg-white hover:cursor-pointer my-4"
-      onClick={(e) => listingDetail(e, listing._id)}
+      onClick={(e) => listingDetail(e, listing._id!)}
     >
       <Carousel imageUrl={listing.imageUrl} />
 
