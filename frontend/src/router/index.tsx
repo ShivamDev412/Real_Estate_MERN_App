@@ -20,10 +20,10 @@ const UpdateProfilePage = React.lazy(
 const AboutPage = React.lazy(() => import("../pages/About"));
 
 // User Listing routes
-const UserListingPage = React.lazy(() => import("../pages/userListing"));
+const UserListingPage = React.lazy(() => import("../pages/userListings"));
 const CreateListing = React.lazy(() => import("../pages/createListing"));
 const EditListing = React.lazy(() => import("../pages/createListing"));
-const UserListingDetailPage = React.lazy(() => import("../pages/userListing/listingDetail"));
+const UserListingDetailPage = React.lazy(() => import("../pages/userListings/listingDetail"));
 
 // Settings Route Pages
 const SettingsPage = React.lazy(() => import("../pages/settings"));
@@ -32,7 +32,8 @@ const ResetPasswordPage = React.lazy(
   () => import("../pages/forgotPassword/resetPassword")
 );
 const VerifyUser = React.lazy(() => import("../pages/verifydetails"));
-const ListingDetailPage = React.lazy(() => import("../pages/home/listingsDetail"));
+const ListingDetailPage = React.lazy(() => import("../pages/listings/listingsDetail"));
+const ListingsPage = React.lazy(() => import("../pages/listings"))
 
 function Router() {
   const {
@@ -51,7 +52,8 @@ function Router() {
     UPDATE_PROFILE,
     VERIFY_EMAIL,
     VERIFY_PHONE_NUMBER,
-    USER_LISTING_DETAIL
+    USER_LISTING_DETAIL,
+    LISTINGS
   } = ENDPOINTS;
   return (
     <BrowserRouter>
@@ -106,6 +108,9 @@ function Router() {
         </Route>
         <Route element={<PrivateRoute />}>
           <Route path={LISTING_DETAIL} element={<ListingDetailPage />} />
+        </Route>
+        <Route element={<PrivateRoute />}>
+          <Route path={LISTINGS} element={<ListingsPage />} />
         </Route>
         <Route element={<PrivateRoute />}>
           <Route path={HOME} element={<HomePage />} />

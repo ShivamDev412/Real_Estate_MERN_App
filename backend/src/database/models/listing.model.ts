@@ -1,6 +1,7 @@
 import mongoose, { Document } from "mongoose";
+import ReviewSchema from "./reviews.modal";
 
-interface Listing extends Document {
+export interface Listing extends Document {
   name: string;
   description: string;
   address: string;
@@ -18,6 +19,12 @@ interface Listing extends Document {
   imageUrl: Array<string>;
   userRef: string;
   rent: boolean;
+  reviews: Array<{
+    userName: string;
+    comment: string;
+    profileImage: string;
+    createdAt: Date;
+  }>;
 }
 interface ListingDocument extends Listing {
   _doc: any;
@@ -91,6 +98,7 @@ const ListingSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    reviews: [ReviewSchema],
   },
   {
     timestamps: true,

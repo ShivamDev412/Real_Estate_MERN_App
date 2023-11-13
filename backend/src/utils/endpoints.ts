@@ -26,6 +26,8 @@ const ENDPOINTS = {
 
   // All Listings
   ALL_LISTINGS: "/",
+  LISTING_DETAIL: "/listing-detail/:listingId",
+  ADD_LISTING_REVIEWS: "/add-listing-review/:listingId"
 };
 const APITYPE = {
   USER: "/api/user",

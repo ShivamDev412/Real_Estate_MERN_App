@@ -22,6 +22,7 @@ function CreateListing() {
     deleteImage,
     listingId,
     goBack,
+    
   } = useCreateListingController();
   return (
     <main className="px-3 py-7">
@@ -92,12 +93,12 @@ function CreateListing() {
                 <>
                   <ToggleSwitch
                     id="gym"
-                    checked={listing.gym}
+                    checked={listing?.gym}
                     onChange={(e) => handleToggleInputChange(e)}
                   />
                   <ToggleSwitch
                     id="swimmingPool"
-                    checked={listing.swimmingPool}
+                    checked={listing?.swimmingPool}
                     onChange={(e) => handleToggleInputChange(e)}
                   />
                 </>

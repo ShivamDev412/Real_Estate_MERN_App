@@ -1,6 +1,5 @@
 import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { useLocation } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { deleteApiCall, getApiCall } from "../../../utils/apiCalls";
 import { setListing } from "../../../redux/slice/listing/newListing";
@@ -15,6 +14,7 @@ export const useListingDetailController = () => {
   const { pathname } = useLocation();
   const dispatch = useDispatch();
   const listingId = pathname.split("/")[2];
+  const pageName = pathname.split("/")[1];
   const { listings } = useSelector((state: RootState) => state.listings);
   const { listing } = useSelector((state: RootState) => state.listing);
   const getListingData = async () => {
@@ -57,5 +57,6 @@ export const useListingDetailController = () => {
     goBack,
     editListing,
     deleteListing,
+    pageName
   };
 };

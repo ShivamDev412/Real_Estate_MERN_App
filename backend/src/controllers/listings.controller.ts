@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import Listing from "../database/models/listing.model";
+import User from "../database/models/user.model";
 export const getAllListings = async (
   request: Request,
   response: Response,
@@ -14,7 +15,7 @@ export const getAllListings = async (
         return (currentDate - createdAt) / (1000 * 60 * 60 * 24) <= 3;
       });
       const listingsOnSale = listings.filter((listing: any) => {
-        return listing.offer !== false;
+        return listing.sale !== false;
       });
       const listingsOnRent = listings.filter((listing: any) => {
         return listing.rent !== false;
@@ -45,5 +46,47 @@ export const getAllListings = async (
     }
   } catch (err) {
     next(err);
+  }
+};
+export const getListingById = async (
+  request: Request,
+  response: Response,
+  next: NextFunction
+) => {
+  const { listingId } = request.params;
+  try {
+    const listing = await Listing.findById(listingId).exec();
+    if (!listing) {
+      return response.status(404).json({
+        success: false,
+        message: "Listing not found",
+      });
+    }
+    const user = await User.findById(listing?.userRef).exec();
+    if (user) {
+      const {
+        _doc: { __v, ...restListingWithoutInternal },
+        ...restListing
+      } = listing;
+      const { phoneNo, email, firstName, lastName, username, ...rest } = user;
+      return response.status(201).json({
+        success: true,
+        message: "Listing fetched successfully",
+        data: {
+          ...restListingWithoutInternal,
+          creatorPhoneNo: phoneNo,
+          creatorEmail: email,
+          creatorUserName: username,
+          creatorName: `${user.firstName} ${user.lastName}`,
+        },
+      });
+    } else {
+      return response.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+  } catch (error) {
+    return next(error);
   }
 };

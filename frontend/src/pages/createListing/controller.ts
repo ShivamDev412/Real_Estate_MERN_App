@@ -93,7 +93,9 @@ export const useCreateListingController = () => {
           wifi: listing.rent ? listing.wifi : false,
           gym: listing.rent ? false : listing.gym,
           swimmingPool: listing.rent ? false : listing.swimmingPool,
-          userRef: listing.userRef ? listing.userRef : currentUser.data.user.id,
+          userRef: listing?.userRef
+            ? listing?.userRef
+            : currentUser.data.user.id,
         };
         const url = !listingId
           ? `${API_TYPE.USER_LISTING}/create-listing`
@@ -103,7 +105,8 @@ export const useCreateListingController = () => {
           : postApiCall(url, listingToSend));
         if (res.success) {
           Toast(res.message, "success");
-          navigate(`/user-listing/${listingId}`);
+          if (!listingId) navigate(`/user-listings`);
+          else navigate(`/user-listing/${listingId}`);
           dispatch(setListing(listingInitialState));
           setFormError(listingInitialStateError);
         } else {

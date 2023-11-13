@@ -4,9 +4,8 @@ import ListingCard from "../../components/ListingCard";
 import NoData from "../../components/noData";
 import { useHomeController } from "./controller";
 import ENDPOINTS from "../../utils/endpoints";
-import { ListingType } from "../../utils/constant";
 interface ListingData {
-  data: ListingType[];
+  data: {}[];
   total: number;
 }
 interface SectionComponent {
@@ -38,15 +37,15 @@ const SectionComponent: React.FC<SectionComponent> = ({
         ) : (
           <section className="w-full">
             {" "}
-            <NoData title="listings" />
+            <NoData title="listings" styles="" />
           </section>
         )}
       </section>
-      {data.data?.length > 3 && (
+      {/* {data.data?.length > 3 && (
         <Link to={ENDPOINTS.LISTINGS} className="flex justify-end text-lg">
           + {data.data?.length - 3} more
         </Link>
-      )}
+      )} */}
     </section>
   );
 };
@@ -96,6 +95,11 @@ function Home() {
         data={listingsOnRent}
         listingDetail={listingDetail}
       />
+      <section className="flex justify-center pb-10">
+        <Link to={ENDPOINTS.LISTINGS} className="text-xl font-semibold hover:text-zinc-700">
+          View All Listings
+        </Link>
+      </section>
     </>
   );
 }

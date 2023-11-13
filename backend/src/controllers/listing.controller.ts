@@ -1,13 +1,16 @@
 import { Request, Response, NextFunction } from "express";
 import Listing from "../database/models/listing.model";
 import { handleError } from "../utils/error";
+
 export const createListing = async (
   request: Request,
   response: Response,
   next: NextFunction
 ) => {
   try {
-    const listing = await Listing.create(request.body);
+    const { reviews = [], ...listingData } = request.body;
+    const listingWithReviews = { ...listingData, reviews };
+    const listing = await Listing.create(listingWithReviews);
     if (listing) {
       response.status(201).json({
         success: true,
@@ -23,6 +26,7 @@ export const createListing = async (
     next(error);
   }
 };
+
 export const getListingById = async (
   request: Request,
   response: Response,

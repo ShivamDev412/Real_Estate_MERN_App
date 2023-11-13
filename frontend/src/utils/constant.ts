@@ -11,25 +11,38 @@ export const loginInitialState = {
   password: "",
 };
 type NumericOrString = number | string;
-
+export interface ReviewsType {
+  userName: string;
+  comment: string;
+  createdAt: string;
+  profileImage: string;
+  _id: string;
+}
 export interface ListingType {
-  name: string;
-  description: string;
   address: string;
-  regularPrice: NumericOrString;
-  discountPrice: NumericOrString;
   bathroom: NumericOrString;
   bedroom: NumericOrString;
-  imageUrl: string[];
-  offer: boolean;
-  sale: boolean;
-  rent: boolean;
+  createdAt?: string;
+  creatorEmail?: string;
+  creatorName?: string;
+  creatorPhoneNo?: string;
+  creatorUserName?: string;
+  description: string;
+  discountPrice: NumericOrString;
   furnished: boolean;
+  gym: boolean;
+  imageUrl: string[];
+  name: string;
+  offer: boolean;
   parking: boolean;
-  gym?: boolean;
-  swimmingPool?: boolean;
-  wifi?: boolean;
-  _id?: string;
+  regularPrice: NumericOrString;
+  rent: boolean;
+  reviews: Array<ReviewsType>;
+  sale: boolean;
+  swimmingPool: boolean;
+  userRef?: string;
+  wifi: boolean;
+  _id?: string;  
 }
 export const listingInitialState: ListingType = {
   name: "",
@@ -48,6 +61,7 @@ export const listingInitialState: ListingType = {
   swimmingPool: false,
   wifi: false,
   imageUrl: [],
+  reviews: [],
 };
 export const listingFilterInitialState = {
   regularPrice: 0,

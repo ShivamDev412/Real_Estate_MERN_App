@@ -97,7 +97,7 @@ function Settings() {
           Delete Account
         </button>
       </section>
-      <Modal modalIsOpen={openModal} closeModal={() => {}}>
+      <Modal modalIsOpen={openModal}>
         <div>
           <h1 className="text-3xl text-center font-semibold my-7">
             Delete Account!

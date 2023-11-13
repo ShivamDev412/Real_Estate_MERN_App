@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { listingInitialState, ListingType } from "../../../utils/constant";
 
 interface InitialStateProps {
-  listing: any;
+  listing: ListingType;
 }
 const initialState: InitialStateProps = {
   listing: listingInitialState,

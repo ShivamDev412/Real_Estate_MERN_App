@@ -13,6 +13,7 @@ body {
   min-width:100vw;
   display: flex;
   flex-direction: column;
+  overflow-x: hidden;
 }
 /* Chrome, Safari, Edge, Opera */
 input::-webkit-outer-spin-button,
@@ -63,4 +64,25 @@ input[type=number] {
   -moz-backface-visibility: hidden;
   -ms-backface-visibility: hidden;
   backface-visibility: hidden;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1; 
+  border-radius: 25px;
+}
+ 
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 25px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555; 
 }

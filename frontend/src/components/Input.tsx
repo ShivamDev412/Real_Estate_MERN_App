@@ -8,6 +8,7 @@ interface Props {
   min?: number;
   max?: number;
   disabled?: boolean;
+  placeHolder?: any;
 
   onChange: (event: ChangeEvent<HTMLInputElement>) => void;
 }
@@ -30,12 +31,17 @@ const Input: React.FC<Props> = ({
   onChange,
   value,
   type = "string",
+  placeHolder = "",
   disabled = false,
 }) => {
   return (
     <input
       type={type}
-      placeholder={id.replace(/([a-z])([A-Z])/g, "$1 $2")}
+      placeholder={
+        placeHolder === ""
+          ? id.replace(/([a-z])([A-Z])/g, "$1 $2")
+          : placeHolder
+      }
       id={id}
       name={id}
       value={value}
@@ -96,7 +102,7 @@ export const Textarea: React.FC<TextAreaProps> = ({ id, onChange, value }) => {
       name={id}
       value={value}
       rows={5}
-      className="border p-3 rounded-lg placeholder:capitalize resize-none overflow-y-auto"
+      className="border p-3 rounded-lg placeholder:capitalize resize-none overflow-y-auto w-full"
       onChange={onChange}
     />
   );

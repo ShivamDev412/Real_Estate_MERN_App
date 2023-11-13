@@ -13,7 +13,7 @@ import { useListingDetailController } from "./controller";
 import { carouselSettings } from "../../../utils/constant";
 import ListingDetailsSkeleton from "./listingDetails.skeleton";
 import Button from "../../../components/Button";
-import {ListingType} from "../../../utils/constant";
+import { ListingType } from "../../../utils/constant";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 interface ExtraDetailComponentProps {
@@ -72,37 +72,41 @@ export const ListingDetailSection = ({
   listing,
   editListing,
   deleteListing,
+  pageName,
 }: {
   listing: ListingType;
-  editListing: (id: string) => void;
-  deleteListing: (id: string) => void;
+  editListing?: (id: string) => void;
+  deleteListing?: (id: string) => void;
+  pageName: string;
 }) => {
   return (
     <section className="flex flex-col gap-4 mt-10 w-[80%] mx-auto">
       <section className="flex md:items-center flex-col md:flex-row md:justify-between">
         <h1 className="text-3xl font-bold capitalize">{listing?.name}</h1>
-        <section className="flex gap-2 xs:my-4 md:m-0">
-          <Button
-            value={
-              <>
-                <FiEdit2 /> Edit
-              </>
-            }
-            type="button"
-            className="bg-green-700 py-2 flex items-center gap-2 w-fit"
-            onClick={() => editListing(listing._id!)}
-          />
-          <Button
-            value={
-              <>
-                <MdDelete className="w-6 h-6" /> Delete
-              </>
-            }
-            type="button"
-            className="bg-red-700 py-2 flex items-center gap-2 w-fit"
-            onClick={() => deleteListing(listing._id!)}
-          />
-        </section>
+        {pageName === "user-listing" && (
+          <section className="flex gap-2 xs:my-4 md:m-0">
+            <Button
+              value={
+                <>
+                  <FiEdit2 /> Edit
+                </>
+              }
+              type="button"
+              className="bg-green-700 py-2 flex items-center gap-2 w-fit"
+              onClick={() => editListing && editListing(listing._id!)}
+            />
+            <Button
+              value={
+                <>
+                  <MdDelete className="w-6 h-6" /> Delete
+                </>
+              }
+              type="button"
+              className="bg-red-700 py-2 flex items-center gap-2 w-fit"
+              onClick={() => deleteListing && deleteListing(listing._id!)}
+            />
+          </section>
+        )}
       </section>
       <section className="flex">
         {listing.discountPrice ? (
@@ -180,7 +184,7 @@ export const ListingDetailSection = ({
   );
 };
 function Listing() {
-  const { listing, goBack, editListing, deleteListing } =
+  const { listing, goBack, editListing, deleteListing, pageName } =
     useListingDetailController();
   return (
     <>
@@ -191,6 +195,7 @@ function Listing() {
             listing={listing}
             editListing={editListing}
             deleteListing={deleteListing}
+            pageName={pageName}
           />
         </section>
       ) : (

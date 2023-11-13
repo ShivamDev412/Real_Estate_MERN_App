@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-type CurrentUserType = {
+export type CurrentUserType = {
   data: {
     token?: string;
     user: {
