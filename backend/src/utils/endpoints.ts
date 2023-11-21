@@ -31,6 +31,8 @@ const ENDPOINTS = {
 
   //** Notification */
   GET_NOTIFICATIONS: "/notifications/:userId",
+  MARK_NOTIFICATION_AS_READ: "/mark-notification_as-read",
+  DELETE_NOTIFICATION: "/delete-notification/:notificationId?"
 };
 const APITYPE = {
   USER: "/api/user",

@@ -22,12 +22,7 @@ const io = getIo();
 //** Middlewares */
 app.use(express.json());
 app.use(cookieParser());
-app.use(
-  cors({
-    origin: "https://paradiseestate-r57azmou1-shiv412.vercel.app/",
-    methods: ["GET", "POST"],
-  })
-);
+app.use(cors());
 app.use(express.urlencoded({ extended: true }));
 
 //** Middleware custom functions */
@@ -43,6 +38,6 @@ io.on("connection", (socket) => {
     console.log("User disconnected");
   });
 });
-app.listen(PORT, () => {
+server.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });

@@ -23,7 +23,7 @@ const ENDPOINTS = {
   CREATE_LISTING: "/create-listing",
   EDIT_LISTING: "/edit-listing/:id",
 
-
+  NOTIFICATIONS:"/notifications",
 };
 export default ENDPOINTS;
 export const API_TYPE = {

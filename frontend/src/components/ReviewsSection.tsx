@@ -14,6 +14,7 @@ interface ReviewsSectionProps {
   handleSearchInReview: (e: React.ChangeEvent<HTMLInputElement>) => void;
   initialReviews: Array<ReviewsType>;
   currentUser: CurrentUserType;
+  eligibleToReview: boolean;
 }
 const ReviewsSection: React.FC<ReviewsSectionProps> = ({
   handleReviewFormSubmit,
@@ -23,27 +24,34 @@ const ReviewsSection: React.FC<ReviewsSectionProps> = ({
   handleSearchInReview,
   initialReviews,
   currentUser,
+  eligibleToReview,
 }) => {
   return (
     <section className="mt-5 w-full md:w-1/2">
-      <h3 className="text-2xl font-semibold">Your review</h3>
-      <form
-        action=""
-        className="mt-2 w-full"
-        onSubmit={(e) => handleReviewFormSubmit(e)}
-      >
-        <Textarea
-          id="your review"
-          value={yourReview}
-          onChange={(e) => setYourReview(e.target.value)}
-        />
-        <Button
-          disabled={yourReview.length ? false : true}
-          type="submit"
-          value="Add review"
-          className="bg-green-700 md:w-1/4 my-2 py-2 w-fit"
-        />
-      </form>
+      {eligibleToReview && (
+        <section>
+          {" "}
+          <h3 className="text-2xl font-semibold">Your review</h3>
+          <form
+            action=""
+            className="mt-2 w-full"
+            onSubmit={(e) => handleReviewFormSubmit(e)}
+          >
+            <Textarea
+              id="your review"
+              value={yourReview}
+              onChange={(e) => setYourReview(e.target.value)}
+            />
+            <Button
+              disabled={yourReview.length ? false : true}
+              type="submit"
+              value="Add review"
+              className="bg-green-700 md:w-1/4 my-2 py-2 w-fit"
+            />
+          </form>
+        </section>
+      )}
+
       <form action="" className="my-4">
         <Input
           id="searchForReviews"
@@ -55,7 +63,7 @@ const ReviewsSection: React.FC<ReviewsSectionProps> = ({
       <section className="w-full mt-4">
         <h4 className="text-lg font-semibold">Others' Reviews</h4>
         {initialReviews.length !== 0 && (
-          <section className="bg-white w-full p-4 mt-4 rounded-lg max-h-[200px] overflow-y-auto shadow-md">
+          <section className="bg-white w-full p-4 mt-4 rounded-lg h-[200px] overflow-y-auto shadow-md">
             {initialReviews.map((review: ReviewsType) => (
               <section key={review._id} className="mb-5 flex gap-2">
                 <img

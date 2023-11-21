@@ -4,8 +4,8 @@ let io: SocketIOServer;
 export const initializeSocketIo = (httpServer: any) => {
   const options = {
     cors: {
-      origin: "https://paradiseestate-r57azmou1-shiv412.vercel.app/", // Adjust this to your frontend's URL
-      methods: ["GET", "POST"],
+      origin: process.env.FRONTEND_URL!,
+      methods: ["GET,HEAD,PUT,PATCH,POST,DELETE"],
     },
   };
 

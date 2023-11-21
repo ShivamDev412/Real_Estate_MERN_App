@@ -72,10 +72,7 @@ function Header() {
 
           {auth ? (
             <>
-              <NotificationDropdown
-                navigation={navigation}
-                currentUser={currentUser}
-              />
+              <NotificationDropdown />
               <ProfileDropdown
                 navigation={navigation}
                 currentUser={currentUser}

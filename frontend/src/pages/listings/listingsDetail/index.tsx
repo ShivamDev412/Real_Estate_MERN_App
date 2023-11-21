@@ -31,7 +31,7 @@ const ListingsDetails = () => {
         <section className="flex flex-col pb-10">
           <SliderSection goBack={goBack} listing={listing} />
           <ListingDetailSection listing={listing} pageName={pageName} />
-          <section className="flex flex-col mt-10 w-[80%] mx-auto ">
+          <section className="flex flex-col mt-10 w-[90%] sm:w-[80%] mx-auto">
             <h3 className="text-xl">
               <span className="font-semibold">Contact Name:</span>{" "}
               {listing.creatorName}{" "}
@@ -80,6 +80,9 @@ const ListingsDetails = () => {
 
             <ReviewsSection
               handleReviewFormSubmit={handleReviewFormSubmit}
+              eligibleToReview={
+                currentUser.data.user.username !== listing.creatorUserName
+              }
               yourReview={yourReview}
               setYourReview={setYourReview}
               searchInReview={searchInReview}

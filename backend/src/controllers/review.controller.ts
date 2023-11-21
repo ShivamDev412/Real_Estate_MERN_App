@@ -35,6 +35,8 @@ export const addReview = async (
     const notification = new NotificationModel({
       userId: ownerUserId,
       title: "New Review Added",
+      profileImage,
+      userName,
       message: `@${userName} added a new review to your listing: "${listingName}".`,
       listingId,
     });
@@ -44,7 +46,10 @@ export const addReview = async (
     io.emit("newReview", {
       userId: ownerUserId,
       title: "New Review Added",
+      profileImage,
+      userName,
       message: `@${userName} added a new review to your listing: "${listingName}".`,
+      listingId,
     });
     return response.status(201).json({
       success: true,
