@@ -14,11 +14,13 @@ export interface ListingFilter {
 }
 export interface InitialStateProps {
   listingFilter: ListingFilter;
+  userQueryString: string;
   queryString: string;
 }
 const initialState: InitialStateProps = {
   listingFilter: listingFilterInitialState,
-  queryString: `${API_TYPE.USER}/listings?pageNo=1`,
+  userQueryString: `${API_TYPE.USER}/listings?pageNo=1`,
+  queryString: `${API_TYPE.LISTINGS}/?pageNo=1`,
 };
 
 const listingFilterSlice = createSlice({
@@ -31,6 +33,12 @@ const listingFilterSlice = createSlice({
     ) => {
       state.listingFilter = action.payload;
     },
+    setUserQueryString: (
+      state,
+      action: PayloadAction<InitialStateProps["userQueryString"]>
+    ) => {
+      state.userQueryString = action.payload;
+    },
     setQueryString: (
       state,
       action: PayloadAction<InitialStateProps["queryString"]>
@@ -39,5 +47,6 @@ const listingFilterSlice = createSlice({
     },
   },
 });
-export const { setListingFilter, setQueryString } = listingFilterSlice.actions;
+export const { setListingFilter, setUserQueryString, setQueryString } =
+  listingFilterSlice.actions;
 export default listingFilterSlice.reducer;

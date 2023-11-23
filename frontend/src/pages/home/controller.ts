@@ -7,17 +7,17 @@ import {
   setRecentAddedListings,
   setListingsOnSales,
   setListingsOnRent,
-} from "../../redux/slice/listings/listingsSlice";
+} from "../../redux/slice/listings/listingsByCategorySlice";
 import Toast from "../../utils/toastMessage";
 import { API_TYPE } from "../../utils/endpoints";
 export const useHomeController = () => {
   const dispatch = useDispatch();
   const navigation = useNavigate();
   const { recentAddedListings, listingsOnSales, listingsOnRent } = useSelector(
-    (state: RootState) => state.allListings
+    (state: RootState) => state.listingsByCategory
   );
   useEffect(() => {
-    getApiCall(API_TYPE.LISTINGS)
+    getApiCall(`${API_TYPE.LISTINGS}/home`)
       .then((response) => {
         if (response.success) {
           const { listingsOnRent, listingsOnSales, recentAddedListings } =

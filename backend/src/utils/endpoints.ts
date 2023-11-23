@@ -25,6 +25,7 @@ const ENDPOINTS = {
   UPDATE_LISTING: "/update-listing/:listingId",
 
   //** All Listings */
+  LISTINGS_BY_CATEGORY: "/home",
   ALL_LISTINGS: "/",
   LISTING_DETAIL: "/listing-detail/:listingId",
   ADD_LISTING_REVIEWS: "/add-listing-review/:listingId",

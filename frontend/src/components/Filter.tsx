@@ -1,6 +1,6 @@
 import { FaFilter } from "react-icons/fa";
 import { NumberInput, ToggleSwitch } from "../components/Input";
-import { AiOutlineClose } from "react-icons/ai";
+import { Popover, PopoverContent, PopoverTrigger } from "./Popover";
 interface Filter {
   showFilter: boolean;
   toggleFilter: () => void;
@@ -14,18 +14,15 @@ interface Filter {
 }
 
 const Filter: React.FC<Filter> = ({
-  showFilter,
-  toggleFilter,
   listingFilter,
   handleToggleInputChange,
   handlePriceFilter,
   clearFilter,
   applyFilter,
   activeFilterCount,
-  closeFilter,
 }) => {
   return (
-    <div className="relative ">
+    <Popover>
       {activeFilterCount ? (
         <span className="absolute top-[-10px] right-[-10px] bg-white rounded-[50%] px-2 shadow-lg">
           {activeFilterCount}
@@ -33,32 +30,18 @@ const Filter: React.FC<Filter> = ({
       ) : (
         <></>
       )}
-      <button
+      <PopoverTrigger
+        asChild
         className="flex items-center gap-1 bg-blue-500 hover:bg-blue-600 text-white rounded-lg px-3 py-2 shadow-md"
-        onClick={toggleFilter}
+        // onClick={toggleFilter}
       >
-        <FaFilter />
-        Filter{" "}
-      </button>
-      <div
-        className={`${
-          showFilter
-            ? "z-20 w-screen h-full fixed top-0 right-0 bg-black/70 overflow-hidden"
-            : ""
-        }`}
-      >
-        <div
-          className={`bg-white rounded-lg p-3 shadow-md absolute  xs:top-[19rem] sm:top-[14.5rem] lg:top-[12.5rem] xs:right-[7.5rem] sm:right-[6rem] md:right-[29vw] lg:right-[24vw] xl:right-[20vw] 2xl:right-[19vw] z-20 w-[250px] flex flex-col gap-4 ${
-            showFilter ? "animate-fade-in" : "hidden"
-          }`}
-        >
-          {" "}
-          <span className="absolute top-2 right-2">
-            <AiOutlineClose
-              className="font-bold hover:cursor-pointer h-5 w-5"
-              onClick={() => closeFilter()}
-            />
-          </span>
+        <div>
+          <FaFilter />
+          <button>Filter</button>
+        </div>
+      </PopoverTrigger>
+      <PopoverContent className="bg-white">
+        <div>
           <div className="flex flex-wrap justify-between mt-4">
             <div className="flex justify-end">
               <ToggleSwitch
@@ -222,8 +205,8 @@ const Filter: React.FC<Filter> = ({
             </button>
           </div>
         </div>
-      </div>
-    </div>
+      </PopoverContent>
+    </Popover>
   );
 };
 export default Filter;

@@ -16,13 +16,9 @@ import {
 const Notifications = () => {
   const {
     data,
-    // totalCount,
     fetchNotifications,
     markAsRead,
     markAllAsRead,
-    // currentUser,
-    // setNotifications,
-    // setTotalCount,
     navigate,
     totalCount,
     pageNumber,
@@ -42,16 +38,20 @@ const Notifications = () => {
           <span className="italic text-[24px]"> ({totalUnreadCount})</span>
         </h2>
         <div className="flex gap-2 flex-wrap w-fit">
-          <Button
-            value={"Delete All Notifications"}
-            className="bg-slate-600 w-fit capitalize font-semibold whitespace-nowrap px-2 xs:text-[14px] md:text-lg"
-            onClick={deleteAllNotifications}
-          />
-          <Button
-            value={"Mark All As Read"}
-            className="bg-slate-600 w-fit capitalize font-semibold whitespace-nowrap px-2 xs:text-[14px] md:text-lg"
-            onClick={markAllAsRead}
-          />
+          {data?.length !== 0 && (
+            <Button
+              value={"Delete All Notifications"}
+              className="bg-slate-600 w-fit capitalize font-semibold whitespace-nowrap px-2 xs:text-[14px] md:text-lg"
+              onClick={deleteAllNotifications}
+            />
+          )}
+          {totalUnreadCount !== 0 && (
+            <Button
+              value={"Mark All As Read"}
+              className="bg-slate-600 w-fit capitalize font-semibold whitespace-nowrap px-2 xs:text-[14px] md:text-lg"
+              onClick={markAllAsRead}
+            />
+          )}
         </div>
       </div>
 

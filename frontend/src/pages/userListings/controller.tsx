@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux/es/hooks/useSelector";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { RootState } from "../../redux/reducers";
 import { getApiCall } from "../../utils/apiCalls";
@@ -12,6 +12,7 @@ import {
 } from "../../redux/slice/listing/listingSlice";
 import {
   setListingFilter,
+  setUserQueryString,
   setQueryString,
 } from "../../redux/slice/listing/listingFilter";
 import Toast from "../../utils/toastMessage";
@@ -20,21 +21,22 @@ import { listingFilterInitialState } from "../../utils/constant";
 import ENDPOINTS, { API_TYPE } from "../../utils/endpoints";
 export const useListingController = () => {
   const dispatch = useDispatch();
+  const location = useLocation();
   const navigation = useNavigate();
+  const path = location.pathname.split("/")[1];
   const [showFilter, setShowFilter] = useState(false);
   const [activeFilterCount, setActiveFilterCount] = useState(0);
   const [dataLength, setDataLength] = useState(0);
-  // const { currentUser } = useSelector((state: RootState) => state.user);
   const { listings, pageNo, totalCount, loading } = useSelector(
-    (state: RootState) => state.listings
+    (state: RootState) => state.userListings
   );
   const { currentUser } = useSelector((state: RootState) => state.user);
-  const { listingFilter, queryString } = useSelector(
-    (state: RootState) => state.listingFilter
+  const { listingFilter, userQueryString, queryString } = useSelector(
+    (state: RootState) => state.userListingFilter
   );
   useEffect(() => {
     dispatch(setLoading(true));
-    getApiCall(queryString)
+    getApiCall(path === "user-listings" ? userQueryString : queryString)
       .then((res) => {
         if (res.success) {
           dispatch(setListings(res.data?.listings));
@@ -51,10 +53,26 @@ export const useListingController = () => {
         dispatch(setLoading(false));
       });
     setDataLength(listings.length);
-  }, [dispatch, queryString]);
+  }, [dispatch, userQueryString, queryString]);
   const onPageChange = (page: number) => {
     dispatch(setPageNo(page));
     applyFilter(page);
+  };
+  const setUrl = (
+    filterQuery: string,
+    callback: any,
+    pageNo: number,
+    url: string
+  ) => {
+    dispatch(
+      callback(
+        `${url}?${
+          filterQuery !== ""
+            ? `${filterQuery}&pageNo=${pageNo}`
+            : `pageNo=${pageNo}`
+        }`
+      )
+    );
   };
   const applyFilter = (
     pageNo: number,
@@ -76,17 +94,15 @@ export const useListingController = () => {
       .map((key) => `${key}=${filteredFilter[key as keyof ListingFilter]}`)
       .join("&");
     setShowFilter(false);
-    dispatch(
-      setQueryString(
-        `${API_TYPE.USER}/listings?${
-          filterQuery !== ""
-            ? `${filterQuery}&pageNo=${pageNo}`
-            : `pageNo=${pageNo}`
-        }`
-      )
-    );
+    if (path === "user-listings")
+      setUrl(
+        filterQuery,
+        setUserQueryString,
+        pageNo,
+        `${API_TYPE.USER}/listings`
+      );
+    else setUrl(filterQuery, setQueryString, pageNo, `${API_TYPE.LISTINGS}/`);
   };
-
 
   const listingDetail = (
     e: React.MouseEvent<HTMLDivElement, MouseEvent>,
@@ -94,7 +110,9 @@ export const useListingController = () => {
   ) => {
     e.preventDefault();
     e.stopPropagation();
-    navigation(`/user-listing/${id}`);
+    navigation(
+      `/${path === "user-listings" ? "user-listing" : "listing-detail"}/${id}`
+    );
   };
 
   const toggleFilter = () => {

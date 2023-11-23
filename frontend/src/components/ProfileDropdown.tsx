@@ -25,7 +25,7 @@ const ProfileDropdown = ({
       <DropdownMenuTrigger asChild>
         <section className="w-10 h-10">
           <img
-            className="w-full h-full rounded-full"
+            className="w-full h-full rounded-full hover:cursor-pointer"
             src={currentUser?.data?.user?.avatar}
             alt={currentUser?.data?.user?.username}
           />

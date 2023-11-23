@@ -3,14 +3,14 @@ import userSlice from "./slice/user/userSlice";
 import listingSlice from "./slice/listing/listingSlice";
 import newListingSlice from "./slice/listing/newListing";
 import listingFilterSlice from "./slice/listing/listingFilter";
-import listingsSlice from "./slice/listings/listingsSlice";
+import listingsByCategorySlice from "./slice/listings/listingsByCategorySlice";
 import notificationSlice from "./slice/notifications/notificationSlice";
 const rootReducer = combineReducers({
   user: userSlice,
-  listings: listingSlice,
+  userListings: listingSlice,
   listing: newListingSlice,
-  listingFilter: listingFilterSlice,
-  allListings: listingsSlice,
+  userListingFilter: listingFilterSlice,
+  listingsByCategory: listingsByCategorySlice,
   notifications: notificationSlice,
 });
 

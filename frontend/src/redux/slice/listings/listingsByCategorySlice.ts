@@ -28,7 +28,7 @@ const initialState: ListingsState = {
     total: 0,
   },
 };
-const listingsSlice = createSlice({
+const listingsByCategorySlice = createSlice({
   name: "user",
   initialState,
   reducers: {
@@ -44,5 +44,5 @@ const listingsSlice = createSlice({
   },
 });
 export const { setRecentAddedListings, setListingsOnSales, setListingsOnRent } =
-  listingsSlice.actions;
-export default listingsSlice.reducer;
+listingsByCategorySlice.actions;
+export default listingsByCategorySlice.reducer;

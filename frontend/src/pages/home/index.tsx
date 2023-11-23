@@ -1,9 +1,11 @@
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import BannerImg from "../../assets/banner.jpg";
 import ListingCard from "../../components/ListingCard";
 import NoData from "../../components/noData";
 import { useHomeController } from "./controller";
 import ENDPOINTS from "../../utils/endpoints";
+import Button from "../../components/Button";
 interface ListingData {
   data: {}[];
   total: number;
@@ -18,6 +20,7 @@ const SectionComponent: React.FC<SectionComponent> = ({
   data,
   listingDetail,
 }) => {
+  const navigate = useNavigate();
   return (
     <section className="w-[90%] sm:w-[80%] mx-auto my-[4rem]">
       <h3 className="text-2xl font-bold text-zinc-900">{title}</h3>
@@ -41,11 +44,15 @@ const SectionComponent: React.FC<SectionComponent> = ({
           </section>
         )}
       </section>
-      {/* {data.data?.length > 3 && (
-        <Link to={ENDPOINTS.LISTINGS} className="flex justify-end text-lg">
-          + {data.data?.length - 3} more
-        </Link>
-      )} */}
+      {data.data?.length > 3 && (
+        <div className="w-full flex justify-end">
+          <Button
+            value={` + ${data?.data?.length - 3} more`}
+            onClick={() => navigate(ENDPOINTS.LISTINGS)}
+            className=" w-fit text-zinc-700 capitalize"
+          />
+        </div>
+      )}
     </section>
   );
 };
@@ -96,7 +103,10 @@ function Home() {
         listingDetail={listingDetail}
       />
       <section className="flex justify-center pb-10">
-        <Link to={ENDPOINTS.LISTINGS} className="text-xl font-semibold hover:text-zinc-700">
+        <Link
+          to={ENDPOINTS.LISTINGS}
+          className="text-xl font-semibold hover:text-zinc-700"
+        >
           View All Listings
         </Link>
       </section>

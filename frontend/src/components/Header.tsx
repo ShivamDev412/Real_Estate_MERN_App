@@ -21,11 +21,11 @@ const NavLinks = ({
   return (
     <li
       className={twMerge(
-        "text-white hover:underline hover:cursor-pointer",
+        "text-white hover:cursor-pointer hover:text-zinc-300 transition-all",
         className
       )}
     >
-      <Link to={linkTo}>{linkName}</Link>
+      <Link to={linkTo} className="">{linkName}</Link>
     </li>
   );
 };
@@ -67,6 +67,11 @@ function Header() {
           <NavLinks
             linkName="About"
             linkTo={ENDPOINTS.ABOUT}
+            className={"hidden lg:inline"}
+          />
+           <NavLinks
+            linkName="Listings"
+            linkTo={ENDPOINTS.LISTINGS}
             className={"hidden lg:inline"}
           />
 
@@ -112,6 +117,11 @@ function Header() {
           <NavLinks
             linkName="About"
             linkTo={ENDPOINTS.ABOUT}
+            className={"inline"}
+          />
+             <NavLinks
+            linkName="Listings"
+            linkTo={ENDPOINTS.LISTINGS}
             className={"inline"}
           />
         </div>
